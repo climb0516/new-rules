@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<!-- Created by 青云 on 2026/10/21. -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
+  <meta name="referrer" content="no-referrer">
+  <title>每月新规 · 下个月起这些规定要变了</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📜</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #070a0d;
+      --panel: rgba(18,26,32,0.8);
+      --panel-2: rgba(255,255,255,0.03);
+      --hover: rgba(255,255,255,0.045);
+      --line: rgba(255,255,255,0.07);
+      --line-2: rgba(255,255,255,0.14);
+      --text-1: #eef4f6;
+      --text-2: #a7b4bb;
+      --text-3: #6c7a82;
+      --accent: #2dd4bf;
+      --grad: linear-gradient(120deg, #2dd4bf 0%, #38bdf8 55%, #818cf8 100%);
+      --grid-dot: rgba(255,255,255,0.045);
+      --glow-1: rgba(45,212,191,0.12);
+      --glow-2: rgba(129,140,248,0.09);
+      --law: #38bdf8;
+      --std: #a78bfa;
+      --news: #f59e0b;
+      --local: #94a3b8;
+      --hot: #f43f5e;
+      --ok: #22c55e;
+      --err: #ef4444;
+      --kbd-bg: rgba(255,255,255,0.06);
+    }
+    :root[data-theme="light"] {
+      --bg: #f7fafb;
+      --panel: rgba(255,255,255,0.92);
+      --panel-2: rgba(0,30,40,0.025);
+      --hover: rgba(0,30,40,0.04);
+      --line: rgba(0,30,40,0.08);
+      --line-2: rgba(0,30,40,0.16);
+      --text-1: #0f1b21;
+      --text-2: #4b5b63;
+      --text-3: #87959c;
+      --accent: #0d9488;
+      --grid-dot: rgba(0,30,40,0.06);
+      --glow-1: rgba(45,212,191,0.09);
+      --glow-2: rgba(129,140,248,0.06);
+      --law: #0284c7;
+      --std: #7c3aed;
+      --news: #d97706;
+      --local: #64748b;
+      --hot: #e11d48;
+      --kbd-bg: rgba(0,30,40,0.05);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text-1);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-size: 14px; line-height: 1.55; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background:
+        radial-gradient(600px 400px at 15% -5%, var(--glow-1), transparent 70%),
+        radial-gradient(700px 500px at 95% 0%, var(--glow-2), transparent 70%),
+        radial-gradient(circle, var(--grid-dot) 1px, transparent 1px) 0 0 / 22px 22px;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, select { font: inherit; color: inherit; }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 30;
+      background: color-mix(in srgb, var(--bg) 72%, transparent);
+      backdrop-filter: saturate(180%) blur(18px); -webkit-backdrop-filter: saturate(180%) blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner { max-width: 1400px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 20px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 17px; letter-spacing: -0.02em; white-space: nowrap; }
+    .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: var(--grad); display: grid; place-items: center; font-size: 15px; box-shadow: 0 0 20px var(--glow-1); }
+    .logo small { font-weight: 500; font-size: 12px; color: var(--text-3); letter-spacing: 0; }
+    .search {
+      flex: 1; max-width: 520px; margin: 0 auto; display: flex; align-items: center; gap: 8px;
+      background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 0 10px; height: 36px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--glow-1); }
+    .search svg { color: var(--text-3); flex: none; }
+    .search input { flex: 1; min-width: 0; background: none; border: none; outline: none; color: var(--text-1); font: inherit; font-size: 13.5px; }
+    .search input::placeholder { color: var(--text-3); }
+    kbd { font-family: inherit; font-size: 11px; color: var(--text-3); background: var(--kbd-bg); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+    .top-right { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .updated { font-size: 12px; color: var(--text-3); display: flex; align-items: center; gap: 6px; }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px rgba(34,197,94,0.2); animation: pulse 2s infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); } }
+    .icon-btn { width: 34px; height: 34px; border-radius: 9px; background: var(--panel); border: 1px solid var(--line); cursor: pointer; display: grid; place-items: center; color: var(--text-2); flex: none; }
+    .icon-btn:hover { color: var(--text-1); border-color: var(--line-2); }
+    .icon-btn.spin svg { animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Layout ── */
+    .layout { max-width: 1400px; margin: 0 auto; padding: 24px 24px 64px; display: grid; grid-template-columns: 190px minmax(0, 1fr) 290px; gap: 24px; align-items: start; }
+    .side { position: sticky; top: 84px; }
+    .side-title { font-size: 11.5px; color: var(--text-3); padding: 0 10px; margin: 4px 0 8px; letter-spacing: .04em; }
+    .side-group + .side-group { margin-top: 20px; }
+    .nav-item { width: 100%; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 8px; border: none; background: none; cursor: pointer; text-align: left; color: var(--text-2); font-size: 13.5px; position: relative; }
+    .nav-item:hover { background: var(--hover); color: var(--text-1); }
+    .nav-item.active { background: var(--panel); color: var(--text-1); box-shadow: inset 0 0 0 1px var(--line); }
+    .nav-item.active::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: 2px; background: var(--grad); }
+    .nav-item .count { margin-left: auto; font-size: 11.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+
+    .main-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+    .main-head h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+    .main-head h1 span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .main-head p { font-size: 12.5px; color: var(--text-3); margin-top: 4px; }
+    select.sel { background: var(--panel); border: 1px solid var(--line); border-radius: 9px; padding: 6px 10px; font-size: 13px; color: var(--text-2); cursor: pointer; }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+    .fchip { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--text-2); cursor: pointer; white-space: nowrap; }
+    .fchip:hover { color: var(--text-1); border-color: var(--line-2); }
+    .fchip.on { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, transparent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+    .fchip i { font-style: normal; color: var(--text-3); margin-left: 3px; font-size: 11px; }
+    .fsep { width: 1px; height: 18px; background: var(--line-2); margin: 0 4px; }
+
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+    .muted { color: var(--text-3); }
+    .empty { text-align: center; padding: 48px 0; color: var(--text-3); }
+    .loading { padding: 80px 0; text-align: center; color: var(--text-3); }
+    .section-title { font-size: 13px; color: var(--text-3); margin: 26px 0 10px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .section-title:first-child { margin-top: 0; }
+    .section-title b { color: var(--text-1); font-size: 15px; }
+    .note { font-size: 12px; color: var(--text-3); margin-top: 10px; }
+    .num { font-variant-numeric: tabular-nums; }
+
+    /* ── KPI ── */
+    .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .kpi { padding: 14px 16px; position: relative; overflow: hidden; }
+    .kpi[data-go] { cursor: pointer; }
+    .kpi[data-go]:hover { border-color: var(--line-2); }
+    .kpi::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--c, var(--accent)); }
+    .kpi .k { font-size: 12px; color: var(--text-3); }
+    .kpi .v { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 2px 0; }
+    .kpi .s { font-size: 12.5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── Picks ── */
+    .picks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .pick { padding: 14px 16px; }
+    .pick h4 { font-size: 14.5px; margin-bottom: 6px; display: flex; gap: 8px; align-items: baseline; }
+    .pick h4 span { font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
+    .pick dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 13px; }
+    .pick dt { color: var(--text-3); white-space: nowrap; }
+    .pick dd { color: var(--text-2); }
+
+    /* ── Rules list ── */
+    .list { display: flex; flex-direction: column; }
+    .rule { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: start; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+    .rule:last-child { border-bottom: none; }
+    .rule:hover { background: var(--hover); }
+    .date-box { text-align: center; padding: 6px 0; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); }
+    .date-box b { display: block; font-size: 17px; font-weight: 800; line-height: 1.15; }
+    .date-box span { font-size: 11px; color: var(--text-3); }
+    .date-box.past { opacity: .55; }
+    .rule .t { font-weight: 600; font-size: 14px; line-height: 1.45; }
+    .rule .t a:hover { color: var(--accent); }
+    .rule .m { font-size: 12px; color: var(--text-3); margin-top: 5px; display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+    .rule .sum { font-size: 12.5px; color: var(--text-2); margin-top: 6px; line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .chip { font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--hover); color: var(--text-2); border: 1px solid var(--line); white-space: nowrap; }
+    .chip.c { color: var(--c); border-color: color-mix(in srgb, var(--c) 35%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent); }
+    .hot { color: var(--hot); font-weight: 600; }
+    .arts { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
+    .arts a { font-size: 12px; color: var(--text-3); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .arts a:hover { color: var(--text-1); }
+    details.fold { border-top: 1px solid var(--line); }
+    details.fold summary { padding: 11px 16px; cursor: pointer; font-size: 13px; color: var(--text-2); list-style: none; display: flex; gap: 8px; align-items: center; }
+    details.fold summary::-webkit-details-marker { display: none; }
+    details.fold summary::before { content: '▸'; color: var(--text-3); transition: transform .15s; }
+    details.fold[open] summary::before { transform: rotate(90deg); }
+    details.fold summary:hover { color: var(--text-1); }
+    .std-row { display: flex; gap: 12px; align-items: baseline; padding: 7px 16px 7px 40px; font-size: 13px; color: var(--text-2); }
+    .std-row:hover { background: var(--hover); color: var(--text-1); }
+    .std-row .d { color: var(--text-3); font-size: 12px; white-space: nowrap; width: 46px; flex: none; }
+    .std-row .l { flex: 1; min-width: 0; }
+    .news-row { display: flex; gap: 12px; align-items: baseline; padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+    .news-row:last-child { border-bottom: none; }
+    .news-row:hover { background: var(--hover); }
+    .news-row .l { flex: 1; min-width: 0; color: var(--text-2); }
+    .news-row:hover .l { color: var(--text-1); }
+    .news-row .r { color: var(--text-3); font-size: 12px; white-space: nowrap; }
+
+    /* ── Aside ── */
+    .aside { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 14px; }
+    .widget { padding: 14px 16px; }
+    .widget h3 { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
+    .w-row { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; padding: 5px 0; border-bottom: 1px dashed var(--line); }
+    .w-row:last-child { border-bottom: none; }
+    .w-row .l { color: var(--text-2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .w-row .r { color: var(--text-3); white-space: nowrap; }
+    a.w-row:hover .l { color: var(--text-1); }
+    .st-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: var(--ok); }
+    .st-dot.bad { background: var(--err); }
+    .st-dot.stale { background: #f59e0b; }
+    .w-note { font-size: 12px; color: var(--text-3); line-height: 1.65; }
+
+    @media (max-width: 1180px) {
+      .layout { grid-template-columns: 170px minmax(0, 1fr); }
+      .aside { display: none; }
+    }
+    @media (max-width: 860px) {
+      .topbar-inner { padding: 0 16px; gap: 10px; }
+      .logo small, .updated, kbd, .top-right a.icon-btn { display: none; }
+      .logo { font-size: 15px; }
+      .search { min-width: 0; flex: 1 1 0; }
+      .layout { grid-template-columns: minmax(0, 1fr); padding: 16px 16px 48px; gap: 16px; }
+      .side { position: static; }
+      .side-title, .side-group + .side-group { display: none; }
+      .side nav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+      .nav-item { width: auto; white-space: nowrap; }
+      .nav-item .count { margin-left: 4px; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .picks { grid-template-columns: minmax(0, 1fr); }
+      .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
+      .rule { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 12px; }
+      .std-row { padding-left: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="logo"><div class="logo-mark">📜</div>每月新规 <small>法规 · 国标 · 政策</small></div>
+      <label class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜索新规，如 社保、房贷、电动车…" autocomplete="off">
+        <kbd>⌘K</kbd>
+      </label>
+      <div class="top-right">
+        <div class="updated"><i class="live-dot"></i><span id="updated">读取中…</span></div>
+        <button class="icon-btn" id="reload" title="重新读取数据"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></button>
+        <a class="icon-btn" href="https://github.com/climb0516/new-rules/actions/workflows/scrape.yml" target="_blank" rel="noopener" title="到 GitHub Actions 手动触发抓取">⚡</a>
+        <button class="icon-btn" id="theme" title="切换深浅色">☾</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side">
+      <div class="side-group"><div class="side-title">按施行月份</div><nav id="nav"></nav></div>
+      <div class="side-group"><div class="side-title">地区</div><div style="padding:0 6px"><select class="sel" id="region" style="width:100%"></select></div></div>
+    </aside>
+    <main id="main"><div class="loading">加载中…</div></main>
+    <aside class="aside" id="aside"></aside>
+  </div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('nr:' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('nr:' + k, JSON.stringify(v)); } catch {} },
+};
+const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
+const KIND = { law: ['法规', 'var(--law)'], std: ['国标', 'var(--std)'], news: ['新闻', 'var(--news)'] };
+const SRC_NAME = { law: '国家法律法规数据库', std: '国家标准全文公开系统', news: 'Google / Bing 新闻' };
+
+let D = null, PICKS = null;
+const state = { view: 'next', q: '', tag: '', kind: store.get('kind', ''), region: store.get('region', '') };
+
+// ── 日期（北京时间） ──
+const cstToday = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 10);
+const diffDays = (a, b) => Math.round((new Date(a + 'T00:00:00Z') - new Date(b + 'T00:00:00Z')) / 86400e3);
+const wd = iso => WEEK[new Date(iso + 'T00:00:00Z').getUTCDay()];
+const md = iso => `${+iso.slice(5, 7)}/${+iso.slice(8, 10)}`;
+const ym = iso => iso.slice(0, 7);
+const monthOf = (base, off) => { const d = new Date(base.slice(0, 7) + '-01T00:00:00Z'); d.setUTCMonth(d.getUTCMonth() + off); return d.toISOString().slice(0, 7); };
+const mName = m => `${+m.slice(5)} 月`;
+function ago(t) {
+  const s = (Date.now() - new Date(t)) / 1000;
+  if (s < 3600) return Math.max(1, Math.round(s / 60)) + ' 分钟前';
+  if (s < 86400) return Math.round(s / 3600) + ' 小时前';
+  return Math.round(s / 86400) + ' 天前';
+}
+
+// ── 筛选 ──
+function regionOk(i) {
+  if (state.region === '*') return true;
+  if (!i.region) return true;                    // 全国性的始终显示
+  return state.region && i.region === state.region;
+}
+const searchOk = i => !state.q || [i.title, i.name, i.org, i.summary, i.region, (i.tags || []).join(' ')].join(' ').toLowerCase().includes(state.q);
+const base = i => regionOk(i) && searchOk(i);                                 // 不含分类、类型，用来算 chip 计数
+const visible = i => base(i) && (!state.tag || i.tags.includes(state.tag)) && (!state.kind || i.kind === state.kind);
+const heat = i => i.articles.length + (i.kind === 'law' && !i.region ? 3 : 0);
+
+// ── 片段 ──
+function dateBox(iso) {
+  return `<div class="date-box ${diffDays(iso, cstToday()) < 0 ? 'past' : ''}"><b class="num">${md(iso)}</b><span>周${wd(iso)}</span></div>`;
+}
+function rule(i) {
+  const [kn, kc] = KIND[i.kind];
+  return `<div class="rule">${dateBox(i.date)}<div>
+    <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.kind === 'news' && i.name ? `《${i.name}》` : i.title)}</a></div>
+    <div class="m"><span class="chip c" style="--c:${kc}">${i.kind === 'law' ? esc(i.type) : kn}</span>
+      <span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>
+      ${i.tags.map(t => `<span class="chip">${esc(t)}</span>`).join('')}
+      ${i.org ? `<span>${esc(i.org)}</span>` : ''}
+      ${i.articles.length >= 3 ? `<span class="hot">🔥 ${i.articles.length} 篇报道</span>` : i.articles.length ? `<span>${i.articles.length} 篇报道</span>` : ''}</div>
+    ${i.kind === 'news' && i.name ? `<div class="sum" style="-webkit-line-clamp:1">${esc(i.title)}</div>` : ''}
+    ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ''}
+    ${i.articles.length ? `<div class="arts">${i.articles.slice(0, 2).map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener">↗ ${esc(a.source || '来源')} · ${ago(a.published)} — ${esc(a.title)}</a>`).join('')}</div>` : ''}
+  </div></div>`;
+}
+function picksFor(month) {
+  const list = (PICKS?.items || []).filter(p => (p.date || '').startsWith(month) && (!state.q || JSON.stringify(p).toLowerCase().includes(state.q)));
+  if (!list.length) return '';
+  return `<div class="section-title"><b>✍️ 精选解读</b><span>和普通人最相关的几条，写成大白话</span></div>
+    <div class="picks">${list.map(p => `<div class="card pick"><h4>${esc(p.title)}<span>${md(p.date)} 起</span></h4>
+      <dl><dt>是什么</dt><dd>${esc(p.what)}</dd><dt>影响谁</dt><dd>${esc(p.who)}</dd>${p.todo ? `<dt>要做什么</dt><dd>${esc(p.todo)}</dd>` : ''}</dl>
+      ${p.url ? `<div class="arts"><a href="${esc(p.url)}" target="_blank" rel="noopener">↗ 原文</a></div>` : ''}</div>`).join('')}</div>`;
+}
+function filters(pool) {
+  const b = pool.filter(base);
+  const tc = {}; b.forEach(i => i.tags.forEach(t => tc[t] = (tc[t] || 0) + 1));
+  const kc = {}; b.forEach(i => kc[i.kind] = (kc[i.kind] || 0) + 1);
+  return `<div class="filters">
+    <button class="fchip ${!state.kind ? 'on' : ''}" data-kind="">全部<i>${b.length}</i></button>
+    ${['law', 'news', 'std'].filter(k => kc[k]).map(k => `<button class="fchip ${state.kind === k ? 'on' : ''}" data-kind="${k}">${KIND[k][0]}<i>${kc[k]}</i></button>`).join('')}
+    <span class="fsep"></span>
+    ${D.tags.filter(t => tc[t]).map(t => `<button class="fchip ${state.tag === t ? 'on' : ''}" data-tag="${esc(t)}">${esc(t)}<i>${tc[t]}</i></button>`).join('')}
+  </div>`;
+}
+
+// ── 视图：某个月 ──
+function viewMonth(month, title, desc) {
+  const today = cstToday();
+  const pool = D.items.filter(i => ym(i.date) === month);
+  const list = pool.filter(visible);
+  // 国标大多是技术标准：有分类标签的正常列出，其余折叠
+  const showStd = state.kind === 'std';
+  const main = list.filter(i => i.kind !== 'std' || showStd || i.tags.length).sort((a, b) => a.date.localeCompare(b.date) || heat(b) - heat(a));
+  const folded = showStd ? [] : list.filter(i => i.kind === 'std' && !i.tags.length);
+  const nat = pool.filter(i => !i.region && i.kind !== 'std').length;
+  const hotOne = [...pool].filter(i => !i.region).sort((a, b) => heat(b) - heat(a))[0];
+  const first = month + '-01', left = diffDays(first, today);
+  return `<div class="main-head"><div><h1>${title}</h1><p>${desc}</p></div></div>
+    <div class="kpis">
+      <div class="card kpi" style="--c:var(--accent)"><div class="k">${mName(month)}起施行（全国）</div><div class="v num">${nat} 条</div><div class="s">另有 ${pool.filter(i => i.kind === 'std').length} 项强制性国标</div></div>
+      <div class="card kpi" style="--c:var(--hot)"><div class="k">最受关注</div><div class="v" style="font-size:16px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${hotOne ? esc(hotOne.name || hotOne.title) : '—'}</div><div class="s">${hotOne ? `${hotOne.articles.length} 篇报道 · ${md(hotOne.date)} 起` : ''}</div></div>
+      <div class="card kpi" style="--c:var(--law)"><div class="k">法律、行政法规</div><div class="v num">${pool.filter(i => i.kind === 'law' && !i.region).length} 部</div><div class="s">地方法规 ${pool.filter(i => i.kind === 'law' && i.region).length} 部</div></div>
+      <div class="card kpi" style="--c:var(--news)"><div class="k">${left > 0 ? `距 ${mName(month)} 1 日` : left === 0 ? '今天' : '本月已过'}</div><div class="v num">${left > 0 ? left + ' 天' : left === 0 ? '今天起施行' : -left + ' 天'}</div><div class="s">${left > 0 ? '可以提前了解、提前准备' : '这些规定已经在执行'}</div></div>
+    </div>
+    ${picksFor(month)}
+    ${filters(pool)}
+    ${main.length ? `<div class="card list">${main.map(rule).join('')}
+      ${folded.length ? `<details class="fold"><summary>另有 ${folded.length} 项技术类强制性国标（检测设备、工业产品等）</summary>${folded.map(i => `<a class="std-row" href="${esc(i.url)}" target="_blank" rel="noopener"><span class="d">${md(i.date)}</span><span class="l">${esc(i.title)}</span></a>`).join('')}</details>` : ''}
+    </div>` : `<div class="card empty">${pool.length ? '没有符合筛选条件的新规' : `暂时还没有 ${mName(month)}起施行的新规`}</div>`}`;
+}
+
+function viewLater() {
+  const after = monthOf(cstToday(), 1);
+  const pool = D.items.filter(i => ym(i.date) > after);
+  const list = pool.filter(visible).filter(i => i.kind !== 'std' || state.kind === 'std' || i.tags.length).sort((a, b) => a.date.localeCompare(b.date) || heat(b) - heat(a));
+  const months = [...new Set(list.map(i => ym(i.date)))];
+  return `<div class="main-head"><div><h1>更远的<span>新规</span></h1><p>${mName(monthOf(after, 1))}及以后施行的，已经公布、还没生效</p></div></div>
+    ${filters(pool)}
+    ${months.map(m => `<div class="section-title"><b>${m.slice(0, 4)} 年 ${mName(m)}</b><span>${list.filter(i => ym(i.date) === m).length} 条</span></div>
+      <div class="card list">${list.filter(i => ym(i.date) === m).map(rule).join('')}</div>`).join('') || '<div class="card empty">没有符合筛选条件的新规</div>'}`;
+}
+
+function viewRoundup() {
+  const rs = D.roundups.filter(r => !state.q || r.title.toLowerCase().includes(state.q));
+  return `<div class="main-head"><div><h1>📰 每月盘点</h1><p>新华社、央视、各地媒体每月末发的「X 月起这些新规将影响你我生活」，一篇看全</p></div></div>
+    ${rs.length ? `<div class="card list">${rs.map(r => `<a class="news-row" href="${esc(r.url)}" target="_blank" rel="noopener"><span class="l">${r.official ? '<span class="chip c" style="--c:var(--accent)">官方媒体</span> ' : ''}${esc(r.title)}</span><span class="r">${esc(r.source)} · ${ago(r.published)}</span></a>`).join('')}</div>` : '<div class="card empty">还没有盘点文章（通常每月最后几天发布）</div>'}`;
+}
+
+// ── 导航、右栏 ──
+function views() {
+  const t = cstToday(), cur = monthOf(t, 0), next = monthOf(t, 1), prev = monthOf(t, -1);
+  const cnt = m => D.items.filter(i => ym(i.date) === m && base(i) && i.kind !== 'std').length;
+  return {
+    next:    { name: `📅 ${mName(next)}起`, count: cnt(next), render: () => viewMonth(next, `${mName(next)}起，<span>这些规定要变了</span>`, '下个月 1 日前后开始施行的法律法规、政策和强制性国标') },
+    cur:     { name: `📌 ${mName(cur)}（本月）`, count: cnt(cur), render: () => viewMonth(cur, `${mName(cur)}起<span>已经施行</span>`, '本月开始执行的新规，可能已经影响到你') },
+    later:   { name: '🔭 更远', count: D.items.filter(i => ym(i.date) > next && base(i) && i.kind !== 'std').length, render: viewLater },
+    prev:    { name: `🗂 ${mName(prev)}（上月）`, count: cnt(prev), render: () => viewMonth(prev, `${mName(prev)}起施行`, '上个月开始施行的新规，留作回顾') },
+    roundup: { name: '📰 每月盘点', count: D.roundups.length, render: viewRoundup },
+  };
+}
+function renderNav(V) {
+  $('#nav').innerHTML = Object.entries(V).map(([k, v]) => `<button class="nav-item ${state.view === k ? 'active' : ''}" data-go="${k}">${v.name}<span class="count">${v.count || ''}</span></button>`).join('');
+}
+function renderRegion() {
+  const regions = [...new Set(D.items.map(i => i.region).filter(Boolean))].sort((a, b) => a === '其他地方' ? 1 : b === '其他地方' ? -1 : a.localeCompare(b, 'zh'));
+  $('#region').innerHTML = `<option value="">只看全国</option>${regions.map(r => `<option value="${esc(r)}" ${state.region === r ? 'selected' : ''}>全国 + ${esc(r)}</option>`).join('')}<option value="*" ${state.region === '*' ? 'selected' : ''}>全部地区</option>`;
+}
+function renderAside() {
+  const t = cstToday(), next = monthOf(t, 1);
+  const hot = D.items.filter(i => !i.region && i.date >= t && ym(i.date) <= next).sort((a, b) => heat(b) - heat(a)).slice(0, 6);
+  $('#aside').innerHTML = `
+    <div class="card widget"><h3>🔥 近期最受关注</h3>${hot.map(i => `<a class="w-row" href="${esc(i.url)}" target="_blank" rel="noopener"><span class="l">${esc(i.name || i.title)}</span><span class="r">${md(i.date)}</span></a>`).join('') || '<div class="w-note">暂无</div>'}</div>
+    <div class="card widget"><h3>🛰 来源状态</h3>${Object.entries(D.sources).map(([k, s]) => `<div class="w-row"><span class="l"><i class="st-dot ${s.ok ? '' : s.stale ? 'stale' : 'bad'}"></i>${SRC_NAME[k] || k}</span><span class="r">${s.ok ? s.count + ' 条' : s.stale ? '旧数据' : '失败'}</span></div>`).join('')}</div>
+    <div class="card widget"><h3>ℹ️ 说明</h3><p class="w-note">「法规」「国标」来自官方数据库，施行日期准确；「新闻」从媒体报道标题提取，同一条新规的多篇报道已合并，具体以官方原文为准。分类标签按关键词自动打，仅供筛选。每天北京时间 07:30 更新。</p></div>`;
+}
+function render() {
+  if (!D) return;
+  const V = views();
+  if (!V[state.view]) state.view = 'next';
+  renderNav(V);
+  $('#main').innerHTML = V[state.view].render();
+  renderAside();
+}
+
+// ── 交互 ──
+document.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]');
+  if (go) { state.view = go.dataset.go; state.tag = ''; render(); window.scrollTo({ top: 0 }); return; }
+  const tg = e.target.closest('[data-tag]');
+  if (tg) { state.tag = state.tag === tg.dataset.tag ? '' : tg.dataset.tag; render(); return; }
+  const kd = e.target.closest('[data-kind]');
+  if (kd) { state.kind = kd.dataset.kind; store.set('kind', state.kind); render(); }
+});
+$('#region').addEventListener('change', e => { state.region = e.target.value; store.set('region', state.region); render(); });
+$('#q').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); render(); });
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('#q').focus(); }
+  if (e.key === 'Escape' && document.activeElement === $('#q')) { $('#q').value = ''; state.q = ''; render(); $('#q').blur(); }
+});
+function applyTheme(t) {
+  document.documentElement.dataset.theme = t;
+  $('#theme').textContent = t === 'light' ? '☀' : '☾';
+}
+applyTheme(store.get('theme', 'dark'));
+$('#theme').onclick = () => { const t = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light'; store.set('theme', t); applyTheme(t); };
+
+async function load() {
+  const btn = $('#reload');
+  btn.classList.add('spin');
+  try {
+    const [r, p] = await Promise.all([fetch('data.json', { cache: 'no-cache' }), fetch('picks.json', { cache: 'no-cache' }).catch(() => null)]);
+    if (!r.ok) throw new Error(r.status);
+    D = await r.json();
+    PICKS = p && p.ok ? await p.json().catch(() => null) : null;
+    $('#updated').textContent = '更新于 ' + ago(D.updated);
+    renderRegion();
+    render();
+  } catch (err) {
+    console.warn('[NewRules]', err);
+    if (!D) $('#main').innerHTML = `<div class="card empty">数据读取失败（${esc(err.message)}），稍后点右上角 ↻ 重试</div>`;
+  } finally {
+    btn.classList.remove('spin');
+  }
+}
+$('#reload').onclick = load;
+load();
+setInterval(() => { if (D) $('#updated').textContent = '更新于 ' + ago(D.updated); }, 60 * 1000);   // 只刷新时间，不重绘（避免收起已展开的折叠）
+</script>
+</body>
+</html>

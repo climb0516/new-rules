@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Created by 青云 on 2026/10/21.
 """每月新规 scraper — 抓取即将施行的法律法规、强制性国家标准和新闻里的新规，输出 data.json。仅依赖 Python 标准库。"""
-import html, json, re, urllib.parse, urllib.request
+import hashlib, html, json, re, struct, time, urllib.parse, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, date, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -23,6 +23,8 @@ FLK      = "https://flk.npc.gov.cn"
 FLK_PAGES = 6            # 按公布日期倒序翻几页（每页 50），足够覆盖近几个月公布、本月起施行的
 STD_PAGES = 3
 NEWS_DAYS = 45
+COVER_BUDGET = 150       # 配图抓取最多花多少秒（增量：已有 img、已试过的文章不再抓）
+COVER_TRIES  = 3         # 每条新规每次最多试几篇报道
 
 NEWS_QUERIES = ["{m}月1日起施行", "{m}月1日起实施", "{m}月起 新规", "{m}月起 这些新规", "{m}月1日起 正式实施"]
 
@@ -398,6 +400,157 @@ def merge(laws_, stds, news_):
     items.sort(key=lambda x: (x["date"], x["kind"] != "law", x["title"]))
     return items
 
+# ── 配图（报道原文的 og:image / 正文首图） ────────────────────────────────────
+
+GN_EXEC = "https://news.google.com/_/DotsSplashUi/data/batchexecute"
+
+def gnews_real(url):
+    """news.google.com/rss/articles/<id> 新版链接不再 302：先取文章页里的签名和时间戳，再调 batchexecute 换出原文地址。"""
+    aid = urllib.parse.urlparse(url).path.rstrip("/").split("/")[-1]
+    s = fetch(f"https://news.google.com/rss/articles/{aid}", timeout=10).decode("utf-8", "ignore")
+    sg, ts = re.search(r'data-n-a-sg="([^"]+)"', s), re.search(r'data-n-a-ts="(\d+)"', s)
+    if not (sg and ts):
+        return None
+    inner = ["garturlreq", [["X", "X", ["X", "X"], None, None, 1, 1, "US:en", None, 1, None, None, None, None, None, 0, 1],
+                            "X", "X", 1, [1, 1, 1], 1, 1, None, 0, 0, None, 0], aid, int(ts[1]), sg[1]]
+    body = urllib.parse.urlencode({"f.req": json.dumps([[["Fbv4je", json.dumps(inner), None, "generic"]]])}).encode()
+    r = fetch(GN_EXEC, body, {"Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"}, timeout=10).decode("utf-8", "ignore")
+    m = re.search(r'\[\\"garturlres\\",\\"(https?://[^"\\]+)', r)
+    return m[1] if m else None
+
+def img_size(b):
+    """从文件头读宽高（PNG / GIF / WebP / JPEG），读不出返回 None。"""
+    if b[:8] == b"\x89PNG\r\n\x1a\n":
+        return struct.unpack(">II", b[16:24])
+    if b[:6] in (b"GIF87a", b"GIF89a"):
+        return struct.unpack("<HH", b[6:10])
+    if b[:4] == b"RIFF" and b[8:12] == b"WEBP":
+        c = b[12:16]
+        if c == b"VP8 ":
+            w, h = struct.unpack("<HH", b[26:30])
+            return w & 0x3fff, h & 0x3fff
+        if c == b"VP8L":
+            v = int.from_bytes(b[21:25], "little")
+            return (v & 0x3fff) + 1, ((v >> 14) & 0x3fff) + 1
+        if c == b"VP8X":
+            return int.from_bytes(b[24:27], "little") + 1, int.from_bytes(b[27:30], "little") + 1
+    if b[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(b):
+            if b[i] != 0xFF:
+                i += 1
+                continue
+            mk = b[i + 1]
+            if mk in (0xD8, 0x01, 0xFF) or 0xD0 <= mk <= 0xD7:
+                i += 1 if mk == 0xFF else 2
+                continue
+            if 0xC0 <= mk <= 0xCF and mk not in (0xC4, 0xC8, 0xCC):
+                h, w = struct.unpack(">HH", b[i + 5:i + 9])
+                return w, h
+            i += 2 + struct.unpack(">H", b[i + 2:i + 4])[0]
+    return None
+
+# 站点 logo、二维码、模板占位图等
+BAD_IMG = re.compile(r"logo|icon|avatar|qrcode|erweima|ewm|/qr/|share|default|placeholder|blank|loading|banner|404|danghui|"
+                     r"gov_small|fd-img|wechat|weixin|/assets/|/skin/|/static/|/_next/|\.svg|\.gif", re.I)
+
+OLD_PATH = re.compile(r"(?<!\d)(20[012]\d)[/_-]?(?:0[1-9]|1[0-2])")
+
+def bad_img(u):
+    """logo、二维码、模板图；路径里带着前年以前日期的多半是站点常年不换的默认图。"""
+    old = OLD_PATH.search(u)
+    return bool(BAD_IMG.search(u) or (old and int(old[1]) < TODAY.year - 1))
+
+def good_img(u):
+    """不带 Referer（页面设了 no-referrer）能直接拿到、尺寸像样的横图：宽 ≥ 360、高 ≥ 160、宽高比 1.2～2.6（方图多是 logo）。"""
+    r = urllib.request.urlopen(urllib.request.Request(u, headers={**UA, "Accept": "image/avif,image/webp,image/*,*/*;q=0.8"}), timeout=10)
+    sz = img_size(r.read(262144))
+    return bool(sz) and sz[0] >= 360 and sz[1] >= 160 and 1.2 <= sz[0] / sz[1] <= 2.6
+
+def page_imgs(url):
+    """候选图：og:image / twitter:image 优先，其次正文里的 <img>。"""
+    s = fetch(url, timeout=12)[:600000].decode("utf-8", "ignore")
+    out = []
+    for m in re.findall(r"<meta[^>]+>", s, re.I):
+        if re.search(r"""(?:property|name|itemprop)\s*=\s*["'](?:og:image|twitter:image(?::src)?|image)["']""", m, re.I):
+            c = re.search(r"""content\s*=\s*["']([^"']+)""", m, re.I)
+            if c:
+                out.append(c[1])
+    body = s[s.find("<body"):] if "<body" in s else s
+    for m in re.findall(r"<img\b[^>]*>", body, re.I | re.S)[:40]:
+        c = re.search(r"""(?:data-original|data-src|src)\s*=\s*["']([^"']+)""", m, re.I)
+        if c:
+            out.append(c[1])
+    res = []
+    for u in out:
+        u = urllib.parse.urljoin(url, html.unescape(u.strip()))
+        if u.startswith("http://"):
+            u = "https://" + u[7:]                # GitHub Pages 是 https，http 图会被拦
+        if u.startswith("https://") and u not in res and not bad_img(u):
+            res.append(u)
+    return res[:6]
+
+def cover_of(art_url):
+    """返回 (图片地址, 原文地址)；没找到返回 (None, 原文地址)；Google 链接解析失败抛异常（下次再试）。"""
+    real = gnews_real(art_url) if "news.google.com" in art_url else art_url
+    if not real:
+        raise ValueError("gnews decode failed")
+    for u in page_imgs(real):
+        try:
+            if good_img(u):
+                return u, real
+        except Exception:
+            pass
+    return None, real
+
+def h8(url):
+    return hashlib.sha1(url.encode()).hexdigest()[:8]
+
+def covers(items, prev):
+    """给新规配图：已有 img 的沿用；没有的从报道原文里找，试过的文章（URL 哈希）记在 cover_tried 里不重复抓。"""
+    old = {i["id"]: i for i in prev.get("items") or [] if i.get("img") and not bad_img(i["img"])}
+    tried = {k: set(v) for k, v in (prev.get("cover_tried") or {}).items()}
+    for i in items:
+        o = old.get(i["id"])
+        if not i.get("img") and o:
+            i["img"], i["img_from"] = o["img"], o.get("img_from", "")
+    todo = [i for i in items if i["kind"] != "std" and not i.get("img") and i["articles"]
+            and any(h8(a["url"]) not in tried.get(i["id"], ()) for a in i["articles"])]
+    nxt = (MONTH_START + timedelta(days=32)).replace(day=1).isoformat()[:7]
+    todo.sort(key=lambda i: (i["date"][:7] != nxt, i["date"] < TODAY.isoformat(), -len(i["articles"])))
+    deadline = time.time() + COVER_BUDGET
+    t0, found = time.time(), [0]
+
+    def one(i):
+        done = tried.setdefault(i["id"], set())
+        for a in [a for a in i["articles"] if h8(a["url"]) not in done][:COVER_TRIES]:
+            if time.time() > deadline:
+                return
+            try:
+                img, real = cover_of(a["url"])
+            except Exception:
+                continue                           # 网络 / 解析失败，下次再试
+            done.add(h8(a["url"]))
+            if img:
+                i["img"], i["img_from"] = img, real
+                found[0] += 1
+                return
+
+    with ThreadPoolExecutor(4) as ex:
+        list(ex.map(one, todo))
+    # 同一张图出自两篇以上不同的文章，多半是站点默认分享图（同一篇文章配给两条新规不算）
+    pages = {}
+    for i in items:
+        if i.get("img"):
+            pages.setdefault(i["img"], set()).add(i.get("img_from", ""))
+    for i in items:
+        if i.get("img") and len(pages[i["img"]]) >= 2:
+            i.pop("img"), i.pop("img_from", None)
+    ids = {i["id"] for i in items}
+    n = sum(1 for i in items if i.get("img"))
+    print(f"  ✓ 配图         {n:>4}（本次尝试 {len(todo)} 条，新找到 {found[0]} 张，用时 {time.time() - t0:.0f}s）")
+    return {k: sorted(v) for k, v in tried.items() if k in ids and v}
+
 # ── 主流程 ────────────────────────────────────────────────────────────────────
 
 def main():
@@ -424,6 +577,11 @@ def main():
         sources[k] = {"ok": not stale, "stale": stale and bool(old), "error": err, "count": len(val[k])}
 
     items = merge(val["law"], val["std"], val["news"])
+    try:
+        cover_tried = covers(items, prev)
+    except Exception as e:                         # 配图失败不影响主数据
+        print(f"  ✗ 配图 {type(e).__name__}: {e}")
+        cover_tried = prev.get("cover_tried") or {}
     data = {
         "updated": datetime.now(CST).isoformat(timespec="seconds"),
         "today": TODAY.isoformat(),
@@ -431,6 +589,7 @@ def main():
         "tags": list(TAGS),
         "items": items,
         "roundups": news.roundups or prev.get("roundups") or [],
+        "cover_tried": cover_tried,
     }
     OUT.write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), "utf-8")
     print(f"→ data.json {OUT.stat().st_size / 1024:.0f} KB，{len(items)} 条")

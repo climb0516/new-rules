@@ -161,6 +161,7 @@
     /* ── Rules list ── */
     .list { display: flex; flex-direction: column; }
     .rule { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: start; padding: 13px 16px; border-bottom: 1px solid var(--line); }
+    .rule.has-img { grid-template-columns: 64px minmax(0, 1fr) 128px; }
     .rule:last-child { border-bottom: none; }
     .rule:hover { background: var(--hover); }
     .date-box { text-align: center; padding: 6px 0; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); }
@@ -171,6 +172,19 @@
     .rule .t a:hover { color: var(--accent); }
     .rule .m { font-size: 12px; color: var(--text-3); margin-top: 5px; display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
     .rule .sum { font-size: 12.5px; color: var(--text-2); margin-top: 6px; line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .thumb { display: block; width: 128px; height: 84px; border-radius: 10px; overflow: hidden; background: var(--panel-2); border: 1px solid var(--line); }
+    .thumb img, .cover-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
+    .rule:hover .thumb img, .cover:hover .cover-img img { transform: scale(1.04); }
+
+    /* ── Cover cards ── */
+    .covers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .cover { overflow: hidden; display: flex; flex-direction: column; }
+    .cover:hover { border-color: var(--line-2); }
+    .cover-img { aspect-ratio: 16 / 9; overflow: hidden; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+    .cover-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .cover-body .t { font-weight: 600; font-size: 13.5px; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .cover:hover .cover-body .t { color: var(--accent); }
+    .cover-body .m { font-size: 12px; color: var(--text-3); margin-top: auto; display: flex; gap: 8px; align-items: center; }
     .chip { font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--hover); color: var(--text-2); border: 1px solid var(--line); white-space: nowrap; }
     .chip.c { color: var(--c); border-color: color-mix(in srgb, var(--c) 35%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent); }
     .hot { color: var(--hot); font-weight: 600; }
@@ -227,6 +241,9 @@
       .picks { grid-template-columns: minmax(0, 1fr); }
       .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
       .rule { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 12px; }
+      .rule.has-img { grid-template-columns: 52px minmax(0, 1fr) 84px; }
+      .thumb { width: 84px; height: 60px; border-radius: 8px; }
+      .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .std-row { padding-left: 16px; }
     }
   </style>
@@ -302,9 +319,24 @@ const heat = i => i.articles.length + (i.kind === 'law' && !i.region ? 3 : 0);
 function dateBox(iso) {
   return `<div class="date-box ${diffDays(iso, cstToday()) < 0 ? 'past' : ''}"><b class="num">${md(iso)}</b><span>周${wd(iso)}</span></div>`;
 }
+// 配图：外链图片，页面已设 no-referrer（不少图床校验 Referer）；加载失败就去掉
+const imgTag = src => `<img src="${esc(src)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="dropImg(this)">`;
+function dropImg(el) {
+  const r = el.closest('.rule');
+  if (r) { r.classList.remove('has-img'); el.closest('.thumb')?.remove(); } else el.remove();
+}
+const linkOf = i => i.img_from || i.url;      // 配图出自的原文（Google 新闻链接国内打不开，封面卡优先跳原文）
+function covers(pool) {
+  const list = pool.filter(i => i.img).sort((a, b) => heat(b) - heat(a)).slice(0, 4);
+  if (list.length < 2) return '';
+  return `<div class="covers">${list.map(i => `<a class="card cover" href="${esc(linkOf(i))}" target="_blank" rel="noopener">
+    <div class="cover-img">${imgTag(i.img)}</div>
+    <div class="cover-body"><div class="t">${esc(i.kind === 'news' && i.name ? `《${i.name}》` : i.title)}</div>
+      <div class="m"><span class="num">${md(i.date)} 起</span><span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>${i.articles.length >= 3 ? `<span class="hot">🔥 ${i.articles.length}</span>` : ''}</div></div></a>`).join('')}</div>`;
+}
 function rule(i) {
   const [kn, kc] = KIND[i.kind];
-  return `<div class="rule">${dateBox(i.date)}<div>
+  return `<div class="rule${i.img ? ' has-img' : ''}">${dateBox(i.date)}<div>
     <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.kind === 'news' && i.name ? `《${i.name}》` : i.title)}</a></div>
     <div class="m"><span class="chip c" style="--c:${kc}">${i.kind === 'law' ? esc(i.type) : kn}</span>
       <span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>
@@ -314,7 +346,7 @@ function rule(i) {
     ${i.kind === 'news' && i.name ? `<div class="sum" style="-webkit-line-clamp:1">${esc(i.title)}</div>` : ''}
     ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ''}
     ${i.articles.length ? `<div class="arts">${i.articles.slice(0, 2).map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener">↗ ${esc(a.source || '来源')} · ${ago(a.published)} — ${esc(a.title)}</a>`).join('')}</div>` : ''}
-  </div></div>`;
+  </div>${i.img ? `<a class="thumb" href="${esc(linkOf(i))}" target="_blank" rel="noopener">${imgTag(i.img)}</a>` : ''}</div>`;
 }
 function picksFor(month) {
   const list = (PICKS?.items || []).filter(p => (p.date || '').startsWith(month) && (!state.q || JSON.stringify(p).toLowerCase().includes(state.q)));
@@ -356,6 +388,7 @@ function viewMonth(month, title, desc) {
       <div class="card kpi" style="--c:var(--news)"><div class="k">${left > 0 ? `距 ${mName(month)} 1 日` : left === 0 ? '今天' : '本月已过'}</div><div class="v num">${left > 0 ? left + ' 天' : left === 0 ? '今天起施行' : -left + ' 天'}</div><div class="s">${left > 0 ? '可以提前了解、提前准备' : '这些规定已经在执行'}</div></div>
     </div>
     ${picksFor(month)}
+    ${covers(pool.filter(visible))}
     ${filters(pool)}
     ${main.length ? `<div class="card list">${main.map(rule).join('')}
       ${folded.length ? `<details class="fold"><summary>另有 ${folded.length} 项技术类强制性国标（检测设备、工业产品等）</summary>${folded.map(i => `<a class="std-row" href="${esc(i.url)}" target="_blank" rel="noopener"><span class="d">${md(i.date)}</span><span class="l">${esc(i.title)}</span></a>`).join('')}</details>` : ''}

@@ -195,11 +195,62 @@ def standards():
         out.append({
             "id": "std-" + norm(tds[1]), "kind": "std", "type": "强制性国标", "title": f"{tds[4]}（{tds[1]}）",
             "date": d.isoformat(), "pub": tds[7][:10], "org": "国家市场监督管理总局 / 国家标准委", "region": "",
-            "tags": tags_of(tds[4]), "summary": "",
+            "tags": tags_of(tds[4]), "summary": "", "status": tds[6], "adopt": tds[3] == "采",
             "url": f"https://openstd.samr.gov.cn/bzgk/gb/newGbInfo?hcno={hc}" if hc else "https://openstd.samr.gov.cn/",
             "articles": [],
         })
     return out
+
+# ── 详情字段（法规：历史版本、相关资料；国标：分类号、主管 / 归口部门） ─────────
+
+DETAIL_BUDGET = 90       # 详情抓取最多花多少秒（增量：上次已抓到的沿用）
+STD_FIELDS = {"英文标准名称": "en", "中国标准分类号（CCS）": "ccs", "国际标准分类号（ICS）": "ics",
+              "主管部门": "dept", "归口部门": "tc", "发布单位": "issuer", "备注": "note"}
+
+def law_detail(i):
+    bb = i["id"][4:]
+    d = json.loads(fetch(f"{FLK}/law-search/search/flfgDetails?bbbs={bb}", headers={"Referer": FLK + "/"}, timeout=12))["data"] or {}
+    return {"versions": [{"title": v["title"], "pub": v.get("gbrq") or ""} for v in d.get("lsyg") or [] if v.get("bbbs") != bb],
+            "docs": [{"type": x.get("busiType") or "", "title": x.get("title") or ""} for x in d.get("xgzl") or [] if x.get("title")]}
+
+def std_detail(i):
+    s = fetch(i["url"], timeout=12).decode("utf-8", "ignore")
+    s = clean(re.sub(r"<script.*?</script>|<style.*?</style>", "", s, flags=re.S))
+    keys = "|".join(re.escape(k) for k in STD_FIELDS) + "|发布日期|实施日期|× 在线预览提示|标准状态"
+    out = {}
+    for k, f in STD_FIELDS.items():
+        m = re.search(re.escape(k) + r"[：:]?\s*(.*?)\s*(?=" + keys + ")", s)
+        if m and m[1].strip():
+            out[f] = m[1].strip()
+    if not out:
+        raise ValueError("no fields")
+    return out
+
+def details(items, prev):
+    """官方条目补详情字段：上次抓到的沿用，新条目在预算内补抓（失败下次再试）。"""
+    old = {i["id"]: i.get("detail") for i in prev.get("items") or [] if i.get("detail")}
+    todo = []
+    for i in items:
+        if i["kind"] == "news":
+            continue
+        if i["id"] in old:
+            i["detail"] = old[i["id"]]
+        elif i["kind"] == "law" or "hcno=" in i["url"]:
+            todo.append(i)
+    deadline, got = time.time() + DETAIL_BUDGET, [0]
+
+    def one(i):
+        if time.time() > deadline:
+            return
+        try:
+            i["detail"] = (law_detail if i["kind"] == "law" else std_detail)(i)
+            got[0] += 1
+        except Exception:
+            pass
+    with ThreadPoolExecutor(6) as ex:
+        list(ex.map(one, todo))
+    n = sum(1 for i in items if i.get("detail"))
+    print(f"  ✓ 详情字段     {n:>4}（本次新抓 {got[0]} / {len(todo)}）")
 
 # ── 新闻（Google / Bing 新闻 RSS） ────────────────────────────────────────────
 
@@ -577,6 +628,10 @@ def main():
         sources[k] = {"ok": not stale, "stale": stale and bool(old), "error": err, "count": len(val[k])}
 
     items = merge(val["law"], val["std"], val["news"])
+    try:
+        details(items, prev)
+    except Exception as e:                         # 详情失败不影响主数据
+        print(f"  ✗ 详情字段 {type(e).__name__}: {e}")
     try:
         cover_tried = covers(items, prev)
     except Exception as e:                         # 配图失败不影响主数据

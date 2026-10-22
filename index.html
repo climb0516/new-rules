@@ -149,15 +149,6 @@
     .kpi .v { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin: 2px 0; }
     .kpi .s { font-size: 12.5px; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* ── Picks ── */
-    .picks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
-    .pick { padding: 14px 16px; }
-    .pick h4 { font-size: 14.5px; margin-bottom: 6px; display: flex; gap: 8px; align-items: baseline; }
-    .pick h4 span { font-size: 12px; color: var(--accent); font-weight: 600; white-space: nowrap; }
-    .pick dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 13px; }
-    .pick dt { color: var(--text-3); white-space: nowrap; }
-    .pick dd { color: var(--text-2); }
-
     /* ── Rules list ── */
     .list { display: flex; flex-direction: column; }
     .rule { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 14px; align-items: start; padding: 13px 16px; border-bottom: 1px solid var(--line); }
@@ -173,14 +164,23 @@
     .rule .m { font-size: 12px; color: var(--text-3); margin-top: 5px; display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
     .rule .sum { font-size: 12.5px; color: var(--text-2); margin-top: 6px; line-height: 1.6; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .thumb { display: block; width: 128px; height: 84px; border-radius: 10px; overflow: hidden; background: var(--panel-2); border: 1px solid var(--line); }
-    .thumb img, .cover-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
-    .rule:hover .thumb img, .cover:hover .cover-img img { transform: scale(1.04); }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
+    .rule:hover .thumb img { transform: scale(1.04); }
+    .rule .t a { cursor: pointer; }
 
     /* ── Cover cards ── */
     .covers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
     .cover { overflow: hidden; display: flex; flex-direction: column; }
     .cover:hover { border-color: var(--line-2); }
-    .cover-img { aspect-ratio: 16 / 9; overflow: hidden; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+    .cover-art { position: relative; aspect-ratio: 16 / 9; overflow: hidden; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between;
+      background: radial-gradient(120% 90% at 100% 100%, color-mix(in srgb, var(--c) 45%, transparent), transparent 60%),
+        linear-gradient(135deg, color-mix(in srgb, var(--c) 30%, var(--bg)), color-mix(in srgb, var(--c) 8%, var(--bg))); }
+    .cover-art .ci { position: absolute; right: 8px; bottom: -4px; font-size: 54px; line-height: 1; opacity: .9; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); transition: transform .25s; }
+    .cover:hover .cover-art .ci { transform: scale(1.08) rotate(-4deg); }
+    .cover-art .ck { align-self: flex-start; font-size: 11.5px; font-weight: 700; padding: 2px 8px; border-radius: 6px; color: var(--text-1);
+      background: color-mix(in srgb, var(--c) 35%, transparent); border: 1px solid color-mix(in srgb, var(--c) 50%, transparent); }
+    .cover-art .cd b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+    .cover-art .cd small { font-size: 11.5px; color: var(--text-2); }
     .cover-body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
     .cover-body .t { font-weight: 600; font-size: 13.5px; line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
     .cover:hover .cover-body .t { color: var(--accent); }
@@ -188,9 +188,9 @@
     .chip { font-size: 11px; padding: 1px 6px; border-radius: 5px; background: var(--hover); color: var(--text-2); border: 1px solid var(--line); white-space: nowrap; }
     .chip.c { color: var(--c); border-color: color-mix(in srgb, var(--c) 35%, transparent); background: color-mix(in srgb, var(--c) 10%, transparent); }
     .hot { color: var(--hot); font-weight: 600; }
-    .arts { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
-    .arts a { font-size: 12px; color: var(--text-3); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-    .arts a:hover { color: var(--text-1); }
+    .more-row { display: block; text-align: center; padding: 11px 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-2); }
+    .more-row:hover { color: var(--accent); background: var(--hover); }
+    .section-title .kit-morelink { margin-left: auto; }
     details.fold { border-top: 1px solid var(--line); }
     details.fold summary { padding: 11px 16px; cursor: pointer; font-size: 13px; color: var(--text-2); list-style: none; display: flex; gap: 8px; align-items: center; }
     details.fold summary::-webkit-details-marker { display: none; }
@@ -199,6 +199,7 @@
     details.fold summary:hover { color: var(--text-1); }
     .std-row { display: flex; gap: 12px; align-items: baseline; padding: 7px 16px 7px 40px; font-size: 13px; color: var(--text-2); }
     .std-row:hover { background: var(--hover); color: var(--text-1); }
+    .rule[data-kit-item]:hover .t { color: var(--accent); }
     .std-row .d { color: var(--text-3); font-size: 12px; white-space: nowrap; width: 46px; flex: none; }
     .std-row .l { flex: 1; min-width: 0; }
     .news-row { display: flex; gap: 12px; align-items: baseline; padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: 13.5px; }
@@ -216,7 +217,7 @@
     .w-row:last-child { border-bottom: none; }
     .w-row .l { color: var(--text-2); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .w-row .r { color: var(--text-3); white-space: nowrap; }
-    a.w-row:hover .l { color: var(--text-1); }
+    a.w-row:hover .l, .w-row[data-kit-item]:hover .l { color: var(--text-1); }
     .st-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; background: var(--ok); }
     .st-dot.bad { background: var(--err); }
     .st-dot.stale { background: #f59e0b; }
@@ -224,7 +225,7 @@
 
     @media (max-width: 1180px) {
       .layout { grid-template-columns: 170px minmax(0, 1fr); }
-      .aside { display: none; }
+      .aside { grid-column: 2; position: static; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); align-items: start; }   /* 右栏挪到正文下面 */
     }
     @media (max-width: 860px) {
       .topbar-inner { padding: 0 16px; gap: 10px; }
@@ -233,19 +234,108 @@
       .search { min-width: 0; flex: 1 1 0; }
       .layout { grid-template-columns: minmax(0, 1fr); padding: 16px 16px 48px; gap: 16px; }
       .side { position: static; }
-      .side-title, .side-group + .side-group { display: none; }
+      .side-title { display: none; }
+      .side-group + .side-group { margin-top: 10px; display: flex; align-items: center; gap: 8px; }   /* 地区筛选：第二行 */
+      .side-group + .side-group .side-title { display: block; margin: 0; padding: 0; white-space: nowrap; }
+      .side-group + .side-group > div { padding: 0 !important; flex: 1; min-width: 0; }
+      .aside { grid-column: auto; }
       .side nav { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
       .nav-item { width: auto; white-space: nowrap; }
       .nav-item .count { margin-left: 4px; }
       .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .picks { grid-template-columns: minmax(0, 1fr); }
       .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
       .rule { grid-template-columns: 52px minmax(0, 1fr); gap: 10px; padding: 12px; }
       .rule.has-img { grid-template-columns: 52px minmax(0, 1fr) 84px; }
       .thumb { width: 84px; height: 60px; border-radius: 8px; }
       .covers { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .std-row { padding-left: 16px; }
+      .cover-art .ci { font-size: 44px; }
+      .cover-art .cd b { font-size: 19px; }
     }
+    @media (max-width: 760px) { .main-head h1 { font-size: 21px; } }
+    /* ── 详情抽屉 + 列表页（通用组件 kit：电脑右侧滑出，手机底部升起；地址 #/item/类型/id、#/list/key） ── */
+    :root { --kit-bg: var(--bg, #0b0a10); --kit-panel: var(--panel, var(--card, rgba(255,255,255,.04))); --kit-line: var(--line, var(--sep, rgba(255,255,255,.08)));
+      --kit-line2: var(--line-2, rgba(255,255,255,.14)); --kit-t1: var(--text-1, #f1eff7); --kit-t2: var(--text-2, #a39fb3); --kit-t3: var(--text-3, #6b677a);
+      --kit-accent: var(--accent, #a3e635); --kit-hover: var(--hover, rgba(255,255,255,.05)); }
+    .kit-mask { position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.38); display: none; }
+    .kit-mask.open { display: block; }
+    .kit-sheet { position: absolute; top: 12px; right: 12px; bottom: 12px; width: clamp(440px, 42vw, 620px); max-width: calc(100vw - 24px);
+      display: flex; flex-direction: column; overflow: hidden; color: var(--kit-t1); border-radius: 18px;
+      background: linear-gradient(var(--kit-panel), var(--kit-panel)), var(--kit-bg); box-shadow: 0 0 0 1px var(--kit-line2), 0 24px 60px rgba(0,0,0,.45);
+      animation: kit-in .24s ease-out; }
+    @keyframes kit-in { from { transform: translateX(40px); opacity: 0; } }
+    .kit-x { position: absolute; top: 12px; right: 12px; z-index: 3; width: 32px; height: 32px; border-radius: 50%; border: 0; cursor: pointer;
+      background: rgba(0,0,0,.5); color: #fff; font-size: 15px; display: grid; place-items: center; }
+    .kit-scroll { flex: 1; overflow-y: auto; overscroll-behavior: contain; }
+    .kit-cover { aspect-ratio: 16/9; background: var(--kit-hover) center / cover no-repeat; position: relative; }
+    .kit-cover.tall { aspect-ratio: auto; height: 280px; background-size: contain; background-color: #000; }
+    .kit-cover.ph { display: grid; place-items: center; font-size: 56px; aspect-ratio: 16/6; }
+    .kit-head { padding: 18px 20px 4px; display: flex; gap: 14px; align-items: flex-start; }
+    .kit-head .kit-thumb { flex-shrink: 0; width: 64px; height: 64px; border-radius: 14px; background: var(--kit-hover) center / cover no-repeat;
+      display: grid; place-items: center; font-size: 28px; overflow: hidden; }
+    .kit-head .kit-t { flex: 1; min-width: 0; padding-right: 30px; }
+    .kit-cover + .kit-head .kit-t { padding-right: 0; }
+    .kit-head h2 { font-size: 19px; font-weight: 800; line-height: 1.35; letter-spacing: -0.01em; }
+    .kit-sub { color: var(--kit-t2); font-size: 13px; margin-top: 4px; }
+    .kit-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .kit-tags span { font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--kit-hover); color: var(--kit-t2); }
+    .kit-big { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .kit-big b { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; }
+    .kit-body { padding: 4px 20px 20px; }
+    .kit-sec { padding-top: 16px; }
+    .kit-sec + .kit-sec { margin-top: 6px; border-top: 1px solid var(--kit-line); }
+    .kit-sec h4 { font-size: 14.5px; font-weight: 700; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .kit-sec h4 small { font-size: 12px; color: var(--kit-t3); font-weight: 500; }
+    .kit-kv { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+    .kit-kv div { background: var(--kit-hover); border-radius: 10px; padding: 8px 11px; min-width: 0; }
+    .kit-kv small { display: block; font-size: 11px; color: var(--kit-t3); }
+    .kit-kv b { display: block; font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+    .kit-p { font-size: 13.5px; line-height: 1.75; color: var(--kit-t2); white-space: pre-line; }
+    .kit-rows { display: flex; flex-direction: column; }
+    .kit-row { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--kit-line); font-size: 13px; text-decoration: none; color: inherit; }
+    .kit-row:first-child { border-top: 0; }
+    .kit-row[data-kit-go], a.kit-row { cursor: pointer; }
+    .kit-row[data-kit-go]:hover .kit-rt, a.kit-row:hover .kit-rt { color: var(--kit-accent); }
+    .kit-row .kit-rt { flex: 1; min-width: 0; line-height: 1.45; }
+    .kit-row .kit-rm { color: var(--kit-t3); font-size: 12px; white-space: nowrap; }
+    .kit-row img, .kit-row .kit-ri { width: 54px; height: 40px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: var(--kit-hover); }
+    .kit-acts { flex-shrink: 0; display: flex; gap: 10px; padding: 12px 20px 16px; border-top: 1px solid var(--kit-line); }
+    .kit-acts a, .kit-acts button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 11px 12px; border-radius: 11px;
+      font: inherit; font-size: 13.5px; font-weight: 700; text-decoration: none; cursor: pointer; border: 1px solid var(--kit-line2); color: var(--kit-t1); background: transparent; }
+    .kit-acts .pri { background: var(--kit-accent); border-color: var(--kit-accent); color: #111; }
+    .kit-acts a:hover, .kit-acts button:hover { filter: brightness(1.08); }
+    /* 列表页 */
+    .kit-lhead { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+    .kit-back { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--kit-line2); background: transparent; color: var(--kit-t1);
+      font-size: 20px; cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
+    .kit-back:hover { background: var(--kit-hover); }
+    .kit-lhead h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+    .kit-lhead small { color: var(--kit-t3); font-size: 12.5px; margin-left: 2px; }
+    .kit-lbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .kit-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+    .kit-chips a, .kit-chips button { padding: 5px 12px; border-radius: 8px; background: var(--kit-hover); color: var(--kit-t2); font: inherit; font-size: 13px;
+      font-weight: 600; white-space: nowrap; border: 0; cursor: pointer; text-decoration: none; }
+    .kit-chips .on { background: var(--kit-t1); color: var(--kit-bg); }
+    .kit-chips small { opacity: .6; margin-left: 4px; font-weight: 500; }
+    .kit-sel { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--kit-line2); background: transparent; color: var(--kit-t1); font: inherit; font-size: 12.5px; font-weight: 600; }
+    .kit-sel option { background: var(--kit-bg); }
+    .kit-more { display: block; margin: 16px auto 0; padding: 9px 22px; border-radius: 10px; border: 1px solid var(--kit-line2); background: transparent;
+      color: var(--kit-t1); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .kit-more:hover { background: var(--kit-hover); }
+    .kit-morelink { font-size: 13px; font-weight: 600; color: var(--kit-t2); text-decoration: none; white-space: nowrap; cursor: pointer; }
+    .kit-morelink:hover { color: var(--kit-t1); }
+    [data-kit-item] { cursor: pointer; }
+    @media (max-width: 760px) {
+      .kit-sheet { top: auto; left: 0; right: 0; bottom: 0; width: 100%; max-width: none; height: 86vh; border-radius: 18px 18px 0 0; animation: kit-up .26s ease-out; }
+      @keyframes kit-up { from { transform: translateY(30%); opacity: .5; } }
+      .kit-head { padding: 16px 16px 4px; } .kit-body { padding: 4px 16px 18px; } .kit-acts { padding: 10px 16px 16px; }
+      .kit-cover.tall { height: 220px; }
+      .kit-head .kit-thumb { width: 46px; height: 46px; border-radius: 12px; font-size: 22px; }
+      .kit-head h2 { font-size: 17.5px; }
+      .kit-big b { font-size: 24px; }
+      .kit-lhead h2 { font-size: 19px; }
+    }
+
   </style>
 </head>
 <body>
@@ -276,6 +366,133 @@
   </div>
 
 <script>
+// ── kit：详情抽屉 + 列表页路由（各站通用，内联在页面里）──
+// 用法：
+//   KIT.item('news', id => ({ title, sub, cover, thumb, tags:[], big, body:'<div class="kit-sec">…</div>', acts:[{text, href, pri}] }))
+//   KIT.list('news', (param, query) => { … 把列表页 HTML 写进容器 … })
+//   条目元素加 data-kit-item="news/<id>" 即可点击打开详情；「查看更多」写成 <a href="#/list/news">
+//   站点首页渲染函数里先调用 KIT.route() —— 返回 true 表示当前是列表页（已渲染），首页不用再渲染
+const KIT = (() => {
+  const items = {}, lists = {};
+  let mask, homeY = 0, fromHome = 0, lastHash = location.hash, onHome = null, listBox = null;
+  const kesc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const parse = h => {
+    const m = (h === undefined ? location.hash : h).match(/^#\/(item|list)\/([^?]+?)(?:\?(.*))?$/);
+    if (!m) return null;
+    const [type, ...rest] = m[2].split('/');
+    return { kind: m[1], type: decodeURIComponent(type), id: rest.map(decodeURIComponent).join('/'), q: new URLSearchParams(m[3] || '') };
+  };
+  function ensure() {
+    if (mask) return;
+    mask = document.createElement('div');
+    mask.className = 'kit-mask';
+    mask.innerHTML = '<div class="kit-sheet" role="dialog" aria-modal="true"></div>';
+    document.body.appendChild(mask);
+    mask.addEventListener('click', e => { if (e.target === mask || e.target.closest('[data-kit-close]')) close(); });
+  }
+  function render(d) {
+    ensure();
+    const cover = d.cover ? `<div class="kit-cover ${d.coverTall ? 'tall' : ''}" style="background-image:url('${kesc(d.cover).replace(/'/g, '%27')}')"></div>`
+      : d.coverIcon ? `<div class="kit-cover ph" style="background:${d.coverBg || 'var(--kit-hover)'}">${d.coverIcon}</div>` : '';
+    const thumb = !d.cover && !d.coverIcon && (d.thumb || d.thumbIcon)
+      ? `<div class="kit-thumb" style="${d.thumb ? `background-image:url('${kesc(d.thumb).replace(/'/g, '%27')}')` : ''}${d.thumbBg ? `;background-color:${d.thumbBg}` : ''}">${d.thumb ? '' : d.thumbIcon}</div>` : '';
+    const acts = (d.acts || []).filter(a => a && (a.href || a.onclick));
+    mask.firstElementChild.innerHTML = `<button class="kit-x" data-kit-close aria-label="关闭">✕</button>
+      <div class="kit-scroll">${cover}
+        <div class="kit-head">${thumb}<div class="kit-t"><h2>${kesc(d.title)}</h2>${d.sub ? `<div class="kit-sub">${d.sub}</div>` : ''}
+          ${(d.tags || []).filter(Boolean).length ? `<div class="kit-tags">${d.tags.filter(Boolean).join('')}</div>` : ''}${d.big ? `<div class="kit-big">${d.big}</div>` : ''}</div></div>
+        <div class="kit-body">${d.body || ''}</div></div>
+      ${acts.length ? `<div class="kit-acts">${acts.map((a, i) => a.href
+        ? `<a class="${a.pri || (i === 0 && acts.length < 3) ? 'pri' : ''}" href="${kesc(a.href)}" ${a.self ? '' : 'target="_blank" rel="noopener"'}>${a.text}</a>`
+        : `<button class="${a.pri ? 'pri' : ''}" data-kit-act="${i}">${a.text}</button>`).join('')}</div>` : ''}`;
+    acts.forEach((a, i) => { if (!a.href) { const b = mask.querySelector(`[data-kit-act="${i}"]`); if (b) b.onclick = a.onclick; } });
+    mask.querySelector('.kit-scroll').scrollTop = 0;
+    mask.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  // 打开详情：写进地址（可分享；浏览器返回 = 关闭）
+  function open(key) {
+    const target = '#/item/' + key;
+    if (location.hash === target) return show(parse(target));
+    ensure();
+    if (parse()?.kind === 'item') history.replaceState(history.state, '', target);
+    else { mask.dataset.base = location.hash; history.pushState({ kit: 1 }, '', target); }
+    lastHash = target;
+    show(parse(target));
+  }
+  function show(r) {
+    const fn = items[r.type];
+    const d = fn && fn(r.id, r.q);
+    if (!d) { close(true); return false; }
+    render(d);
+    return true;
+  }
+  function close(silent) {
+    if (!mask || !mask.classList.contains('open')) return;
+    mask.classList.remove('open');
+    document.body.style.overflow = '';
+    if (!silent && parse()?.kind === 'item') {
+      if (history.state && history.state.kit) history.back();          // 从页面里点开的：退回去
+      else { history.replaceState(null, '', mask.dataset.base || location.pathname + location.search); lastHash = location.hash; }   // 直接打开的分享链接
+    }
+  }
+  // 当前地址是列表页时渲染列表页并返回 true；首页时返回 false
+  function route(box) {
+    if (box) listBox = box;
+    const r = parse();
+    if (r && r.kind === 'list' && lists[r.type]) { lists[r.type](r.id, r.q, listBox); return true; }
+    return false;
+  }
+  // 列表页的公共外壳：返回按钮 + 标题 + 子分类 + 排序
+  function shell({ title, note, chips, sort, sortVal, body, more }) {
+    return `<div class="kit-lhead"><button class="kit-back" data-kit-back title="返回">‹</button><h2>${kesc(title)}</h2>${note ? `<small>${note}</small>` : ''}</div>
+      ${chips || sort ? `<div class="kit-lbar"><div class="kit-chips">${(chips || []).map(c => `<a class="${c.on ? 'on' : ''}" href="${kesc(c.href)}">${kesc(c.text)}${c.count != null ? `<small>${c.count}</small>` : ''}</a>`).join('')}</div>
+        ${sort ? `<select class="kit-sel" data-kit-sort>${sort.map(([v, n]) => `<option value="${kesc(v)}" ${v === sortVal ? 'selected' : ''}>${kesc(n)}</option>`).join('')}</select>` : ''}</div>` : ''}
+      ${body}${more ? `<button class="kit-more" data-kit-more>${more}</button>` : ''}`;
+  }
+  function init(home) {
+    onHome = home;
+    document.addEventListener('click', e => {
+      const t = e.target.closest('[data-kit-item],[data-kit-go],[data-kit-back]');
+      if (!t) return;
+      const inner = e.target.closest('a[href],button,input,select,label,summary');   // 卡片里的其它按钮 / 链接（关注、复制…）优先
+      if (inner && inner !== t && t.contains(inner)) return;
+      e.preventDefault();
+      if (t.dataset.kitBack !== undefined) { fromHome && history.length > fromHome ? history.go(-fromHome) : (location.hash = ''); return; }
+      open(t.dataset.kitItem || t.dataset.kitGo);
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+    window.addEventListener('hashchange', () => {
+      const r = parse();
+      let was = parse(lastHash), steps = 1;
+      if (was && was.kind === 'item') {                                 // 从详情离开
+        const base = mask && mask.dataset.base !== undefined ? mask.dataset.base : '';
+        if (location.hash === base) { lastHash = location.hash; close(true); return; }   // 只是关掉详情，底下页面不动
+        was = parse(base); steps = 2;                                   // 在详情里点了别的列表：按详情底下那页算，返回要退两步
+      }
+      lastHash = location.hash;
+      if (r && r.kind === 'item') { show(r); return; }
+      close(true);
+      const wasHome = !was;
+      if (r && r.kind === 'list') {
+        if (wasHome) { homeY = scrollY; fromHome = steps; }
+        onHome && onHome();
+        if (wasHome || was.type !== r.type) scrollTo(0, 0);
+      } else {
+        onHome && onHome();
+        if (fromHome) { scrollTo(0, homeY); fromHome = 0; }
+      }
+    });
+    // 直接打开带 #/item/ 的链接（比如大屏跳过来）：页面数据读完后由站点调用 KIT.boot()
+  }
+  function boot() { const r = parse(); if (r && r.kind === 'item') show(r); }
+  return { item: (t, fn) => (items[t] = fn), list: (t, fn) => (lists[t] = fn), open, close, route, shell, init, boot, parse, esc: kesc,
+    // 小工具：详情里的键值格、段落、关联列表
+    kv: rows => { const r = rows.filter(x => x && x[1] != null && x[1] !== ''); return r.length ? `<div class="kit-kv">${r.map(([k, v]) => `<div><small>${kesc(k)}</small><b title="${kesc(v)}">${kesc(v)}</b></div>`).join('')}</div>` : ''; },
+    sec: (title, html, note) => html ? `<div class="kit-sec"><h4>${title}${note ? `<small>${note}</small>` : ''}</h4>${html}</div>` : '',
+    p: t => t ? `<p class="kit-p">${kesc(t)}</p>` : '',
+  };
+})();
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const store = {
@@ -285,8 +502,17 @@ const store = {
 const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
 const KIND = { law: ['法规', 'var(--law)'], std: ['国标', 'var(--std)'], news: ['新闻', 'var(--news)'] };
 const SRC_NAME = { law: '国家法律法规数据库', std: '国家标准全文公开系统', news: 'Google / Bing 新闻' };
+// 分类 → [图标, 颜色]：封面卡、详情图标块用
+const CAT = {
+  社保医保: ['🛡️', 'var(--ok)'], 收入个税: ['💴', 'var(--news)'], 交通出行: ['🚗', 'var(--law)'], 消费购物: ['🛒', 'var(--hot)'],
+  住房物业: ['🏠', 'var(--accent)'], 教育育儿: ['🎒', 'var(--std)'], 就业劳动: ['💼', 'var(--law)'], 金融投资: ['📈', 'var(--news)'],
+  医疗健康: ['🏥', 'var(--ok)'], 食品药品: ['🍱', 'var(--hot)'], 三农: ['🌾', 'var(--ok)'], 网络数据: ['🌐', 'var(--std)'],
+  安全应急: ['🧯', 'var(--hot)'], 生态环境: ['🌿', 'var(--ok)'], 出入境: ['🛂', 'var(--law)'],
+};
+const KIND_ICON = { law: '⚖️', std: '📏', news: '📰' };
+const catOf = i => i.tags[0] && CAT[i.tags[0]] ? [i.tags[0], ...CAT[i.tags[0]]] : [KIND[i.kind][0], KIND_ICON[i.kind], KIND[i.kind][1]];
 
-let D = null, PICKS = null;
+let D = null, BY_ID = new Map(), RU_ID = new Map();
 const state = { view: 'next', q: '', tag: '', kind: store.get('kind', ''), region: store.get('region', '') };
 
 // ── 日期（北京时间） ──
@@ -303,6 +529,8 @@ function ago(t) {
   if (s < 86400) return Math.round(s / 3600) + ' 小时前';
   return Math.round(s / 86400) + ' 天前';
 }
+// 盘点文章没有 id：按链接算个短哈希（同一份 data.json 内稳定）
+const hid = s => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) | 0; return (h >>> 0).toString(36); };
 
 // ── 筛选 ──
 function regionOk(i) {
@@ -312,8 +540,15 @@ function regionOk(i) {
 }
 const searchOk = i => !state.q || [i.title, i.name, i.org, i.summary, i.region, (i.tags || []).join(' ')].join(' ').toLowerCase().includes(state.q);
 const base = i => regionOk(i) && searchOk(i);                                 // 不含分类、类型，用来算 chip 计数
-const visible = i => base(i) && (!state.tag || i.tags.includes(state.tag)) && (!state.kind || i.kind === state.kind);
+const pick = (kind, tag) => i => base(i) && (!tag || i.tags.includes(tag)) && (!kind || i.kind === kind);
+const visible = i => pick(state.kind, state.tag)(i);
 const heat = i => i.articles.length + (i.kind === 'law' && !i.region ? 3 : 0);
+// 国标大多是技术标准：有分类标签的正常列出，其余只在「国标」分类下出现
+const shown = kind => i => i.kind !== 'std' || kind === 'std' || i.tags.length;
+const byDate = (a, b) => a.date.localeCompare(b.date) || heat(b) - heat(a);
+const SORTS = { date: byDate, heat: (a, b) => heat(b) - heat(a) || a.date.localeCompare(b.date), pub: (a, b) => (b.pub || '').localeCompare(a.pub || '') || byDate(a, b) };
+const nameOf = i => i.kind === 'news' && i.name ? `《${i.name}》` : i.title;
+const ruleKey = i => 'rule/' + encodeURIComponent(i.id);
 
 // ── 片段 ──
 function dateBox(iso) {
@@ -325,36 +560,32 @@ function dropImg(el) {
   const r = el.closest('.rule');
   if (r) { r.classList.remove('has-img'); el.closest('.thumb')?.remove(); } else el.remove();
 }
-const linkOf = i => i.img_from || i.url;      // 配图出自的原文（Google 新闻链接国内打不开，封面卡优先跳原文）
+// 封面卡：不用新闻图（多是公文截图），按分类画渐变封面
 function covers(pool) {
-  const list = pool.filter(i => i.img).sort((a, b) => heat(b) - heat(a)).slice(0, 4);
+  const list = pool.filter(shown(state.kind)).sort((a, b) => heat(b) - heat(a)).slice(0, 4);
   if (list.length < 2) return '';
-  return `<div class="covers">${list.map(i => `<a class="card cover" href="${esc(linkOf(i))}" target="_blank" rel="noopener">
-    <div class="cover-img">${imgTag(i.img)}</div>
-    <div class="cover-body"><div class="t">${esc(i.kind === 'news' && i.name ? `《${i.name}》` : i.title)}</div>
-      <div class="m"><span class="num">${md(i.date)} 起</span><span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>${i.articles.length >= 3 ? `<span class="hot">🔥 ${i.articles.length}</span>` : ''}</div></div></a>`).join('')}</div>`;
+  return `<div class="covers">${list.map(i => {
+    const [cn, ci, cc] = catOf(i), left = diffDays(i.date, cstToday());
+    return `<div class="card cover" style="--c:${cc}" data-kit-item="${ruleKey(i)}">
+    <div class="cover-art"><span class="ck">${esc(cn)} · ${esc(i.kind === 'law' ? i.type : KIND[i.kind][0])}</span><span class="ci">${ci}</span>
+      <div class="cd"><b class="num">${md(i.date)}</b><small>${left > 0 ? `起施行 · 还有 ${left} 天` : left === 0 ? '今天起施行' : '起已施行'}</small></div></div>
+    <div class="cover-body"><div class="t">${esc(nameOf(i))}</div>
+      <div class="m"><span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>${i.articles.length >= 3 ? `<span class="hot">🔥 ${i.articles.length}</span>` : i.articles.length ? `<span>${i.articles.length} 篇报道</span>` : ''}</div></div></div>`;
+  }).join('')}</div>`;
 }
 function rule(i) {
   const [kn, kc] = KIND[i.kind];
-  return `<div class="rule${i.img ? ' has-img' : ''}">${dateBox(i.date)}<div>
-    <div class="t"><a href="${esc(i.url)}" target="_blank" rel="noopener">${esc(i.kind === 'news' && i.name ? `《${i.name}》` : i.title)}</a></div>
+  const a0 = i.articles[0];
+  return `<div class="rule${i.img ? ' has-img' : ''}" data-kit-item="${ruleKey(i)}">${dateBox(i.date)}<div>
+    <div class="t"><a href="#/item/${ruleKey(i)}" data-kit-item="${ruleKey(i)}">${esc(nameOf(i))}</a></div>
     <div class="m"><span class="chip c" style="--c:${kc}">${i.kind === 'law' ? esc(i.type) : kn}</span>
       <span class="chip c" style="--c:${i.region ? 'var(--local)' : 'var(--accent)'}">${esc(i.region || '全国')}</span>
       ${i.tags.map(t => `<span class="chip">${esc(t)}</span>`).join('')}
       ${i.org ? `<span>${esc(i.org)}</span>` : ''}
       ${i.articles.length >= 3 ? `<span class="hot">🔥 ${i.articles.length} 篇报道</span>` : i.articles.length ? `<span>${i.articles.length} 篇报道</span>` : ''}</div>
     ${i.kind === 'news' && i.name ? `<div class="sum" style="-webkit-line-clamp:1">${esc(i.title)}</div>` : ''}
-    ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : ''}
-    ${i.articles.length ? `<div class="arts">${i.articles.slice(0, 2).map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener">↗ ${esc(a.source || '来源')} · ${ago(a.published)} — ${esc(a.title)}</a>`).join('')}</div>` : ''}
-  </div>${i.img ? `<a class="thumb" href="${esc(linkOf(i))}" target="_blank" rel="noopener">${imgTag(i.img)}</a>` : ''}</div>`;
-}
-function picksFor(month) {
-  const list = (PICKS?.items || []).filter(p => (p.date || '').startsWith(month) && (!state.q || JSON.stringify(p).toLowerCase().includes(state.q)));
-  if (!list.length) return '';
-  return `<div class="section-title"><b>✍️ 精选解读</b><span>和普通人最相关的几条，写成大白话</span></div>
-    <div class="picks">${list.map(p => `<div class="card pick"><h4>${esc(p.title)}<span>${md(p.date)} 起</span></h4>
-      <dl><dt>是什么</dt><dd>${esc(p.what)}</dd><dt>影响谁</dt><dd>${esc(p.who)}</dd>${p.todo ? `<dt>要做什么</dt><dd>${esc(p.todo)}</dd>` : ''}</dl>
-      ${p.url ? `<div class="arts"><a href="${esc(p.url)}" target="_blank" rel="noopener">↗ 原文</a></div>` : ''}</div>`).join('')}</div>`;
+    ${i.summary ? `<div class="sum">${esc(i.summary)}</div>` : a0 && !i.name && i.kind !== 'news' ? `<div class="sum" style="-webkit-line-clamp:1">${esc(a0.source || '报道')}：${esc(a0.title)}</div>` : ''}
+  </div>${i.img ? `<div class="thumb">${imgTag(i.img)}</div>` : ''}</div>`;
 }
 function filters(pool) {
   const b = pool.filter(base);
@@ -367,50 +598,140 @@ function filters(pool) {
     ${D.tags.filter(t => tc[t]).map(t => `<button class="fchip ${state.tag === t ? 'on' : ''}" data-tag="${esc(t)}">${esc(t)}<i>${tc[t]}</i></button>`).join('')}
   </div>`;
 }
+// 列表页地址：带上首页当前的类型 / 标签筛选
+const listHref = key => `#/list/${key}${state.kind || state.tag ? '?' + new URLSearchParams({ ...(state.kind && { kind: state.kind }), ...(state.tag && { tag: state.tag }) }) : ''}`;
+const HOME_N = 10;
 
 // ── 视图：某个月 ──
 function viewMonth(month, title, desc) {
   const today = cstToday();
   const pool = D.items.filter(i => ym(i.date) === month);
   const list = pool.filter(visible);
-  // 国标大多是技术标准：有分类标签的正常列出，其余折叠
-  const showStd = state.kind === 'std';
-  const main = list.filter(i => i.kind !== 'std' || showStd || i.tags.length).sort((a, b) => a.date.localeCompare(b.date) || heat(b) - heat(a));
-  const folded = showStd ? [] : list.filter(i => i.kind === 'std' && !i.tags.length);
+  const main = list.filter(shown(state.kind)).sort(byDate);
+  const folded = state.kind === 'std' ? 0 : list.filter(i => i.kind === 'std' && !i.tags.length).length;
   const nat = pool.filter(i => !i.region && i.kind !== 'std').length;
   const hotOne = [...pool].filter(i => !i.region).sort((a, b) => heat(b) - heat(a))[0];
   const first = month + '-01', left = diffDays(first, today);
   return `<div class="main-head"><div><h1>${title}</h1><p>${desc}</p></div></div>
     <div class="kpis">
       <div class="card kpi" style="--c:var(--accent)"><div class="k">${mName(month)}起施行（全国）</div><div class="v num">${nat} 条</div><div class="s">另有 ${pool.filter(i => i.kind === 'std').length} 项强制性国标</div></div>
-      <div class="card kpi" style="--c:var(--hot)"><div class="k">最受关注</div><div class="v" style="font-size:16px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${hotOne ? esc(hotOne.name || hotOne.title) : '—'}</div><div class="s">${hotOne ? `${hotOne.articles.length} 篇报道 · ${md(hotOne.date)} 起` : ''}</div></div>
+      <div class="card kpi" style="--c:var(--hot)" ${hotOne ? `data-kit-item="${ruleKey(hotOne)}"` : ''}><div class="k">最受关注</div><div class="v" style="font-size:16px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${hotOne ? esc(hotOne.name || hotOne.title) : '—'}</div><div class="s">${hotOne ? `${hotOne.articles.length} 篇报道 · ${md(hotOne.date)} 起` : ''}</div></div>
       <div class="card kpi" style="--c:var(--law)"><div class="k">法律、行政法规</div><div class="v num">${pool.filter(i => i.kind === 'law' && !i.region).length} 部</div><div class="s">地方法规 ${pool.filter(i => i.kind === 'law' && i.region).length} 部</div></div>
       <div class="card kpi" style="--c:var(--news)"><div class="k">${left > 0 ? `距 ${mName(month)} 1 日` : left === 0 ? '今天' : '本月已过'}</div><div class="v num">${left > 0 ? left + ' 天' : left === 0 ? '今天起施行' : -left + ' 天'}</div><div class="s">${left > 0 ? '可以提前了解、提前准备' : '这些规定已经在执行'}</div></div>
     </div>
-    ${picksFor(month)}
-    ${covers(pool.filter(visible))}
+    ${covers(list)}
     ${filters(pool)}
-    ${main.length ? `<div class="card list">${main.map(rule).join('')}
-      ${folded.length ? `<details class="fold"><summary>另有 ${folded.length} 项技术类强制性国标（检测设备、工业产品等）</summary>${folded.map(i => `<a class="std-row" href="${esc(i.url)}" target="_blank" rel="noopener"><span class="d">${md(i.date)}</span><span class="l">${esc(i.title)}</span></a>`).join('')}</details>` : ''}
+    ${main.length ? `<div class="card list">${main.slice(0, HOME_N).map(rule).join('')}
+      ${main.length > HOME_N ? `<a class="more-row" href="${listHref('month/' + month)}">查看全部 ${main.length} 条 →</a>` : ''}
+      ${folded ? `<a class="more-row" href="#/list/month/${month}?kind=std">另有 ${folded} 项技术类强制性国标（检测设备、工业产品等）→</a>` : ''}
     </div>` : `<div class="card empty">${pool.length ? '没有符合筛选条件的新规' : `暂时还没有 ${mName(month)}起施行的新规`}</div>`}`;
 }
 
+const laterPool = () => { const after = monthOf(cstToday(), 1); return D.items.filter(i => ym(i.date) > after); };
+// 按月分组的条目
+const byMonth = list => [...new Set(list.map(i => ym(i.date)))].map(m => `<div class="section-title"><b>${m.slice(0, 4)} 年 ${mName(m)}</b><span>${list.filter(i => ym(i.date) === m).length} 条</span></div>
+  <div class="card list">${list.filter(i => ym(i.date) === m).map(rule).join('')}</div>`).join('');
 function viewLater() {
   const after = monthOf(cstToday(), 1);
-  const pool = D.items.filter(i => ym(i.date) > after);
-  const list = pool.filter(visible).filter(i => i.kind !== 'std' || state.kind === 'std' || i.tags.length).sort((a, b) => a.date.localeCompare(b.date) || heat(b) - heat(a));
-  const months = [...new Set(list.map(i => ym(i.date)))];
+  const pool = laterPool();
+  const list = pool.filter(visible).filter(shown(state.kind)).sort(byDate);
   return `<div class="main-head"><div><h1>更远的<span>新规</span></h1><p>${mName(monthOf(after, 1))}及以后施行的，已经公布、还没生效</p></div></div>
     ${filters(pool)}
-    ${months.map(m => `<div class="section-title"><b>${m.slice(0, 4)} 年 ${mName(m)}</b><span>${list.filter(i => ym(i.date) === m).length} 条</span></div>
-      <div class="card list">${list.filter(i => ym(i.date) === m).map(rule).join('')}</div>`).join('') || '<div class="card empty">没有符合筛选条件的新规</div>'}`;
+    ${byMonth(list.slice(0, HOME_N)) || '<div class="card empty">没有符合筛选条件的新规</div>'}
+    ${list.length > HOME_N ? `<div class="card" style="margin-top:12px"><a class="more-row" style="border:0" href="${listHref('later')}">查看全部 ${list.length} 条 →</a></div>` : ''}`;
 }
 
+const roundups = () => D.roundups.filter(r => !state.q || r.title.toLowerCase().includes(state.q));
+const ruRow = r => `<a class="news-row" href="#/item/roundup/${hid(r.url)}" data-kit-item="roundup/${hid(r.url)}"><span class="l">${r.official ? '<span class="chip c" style="--c:var(--accent)">官方媒体</span> ' : ''}${esc(r.title)}</span><span class="r">${esc(r.source)} · ${ago(r.published)}</span></a>`;
 function viewRoundup() {
-  const rs = D.roundups.filter(r => !state.q || r.title.toLowerCase().includes(state.q));
+  const rs = roundups();
   return `<div class="main-head"><div><h1>📰 每月盘点</h1><p>新华社、央视、各地媒体每月末发的「X 月起这些新规将影响你我生活」，一篇看全</p></div></div>
-    ${rs.length ? `<div class="card list">${rs.map(r => `<a class="news-row" href="${esc(r.url)}" target="_blank" rel="noopener"><span class="l">${r.official ? '<span class="chip c" style="--c:var(--accent)">官方媒体</span> ' : ''}${esc(r.title)}</span><span class="r">${esc(r.source)} · ${ago(r.published)}</span></a>`).join('')}</div>` : '<div class="card empty">还没有盘点文章（通常每月最后几天发布）</div>'}`;
+    ${rs.length ? `<div class="card list">${rs.slice(0, HOME_N).map(ruRow).join('')}${rs.length > HOME_N ? `<a class="more-row" href="#/list/roundup">查看全部 ${rs.length} 篇 →</a>` : ''}</div>` : '<div class="card empty">还没有盘点文章（通常每月最后几天发布）</div>'}`;
 }
+
+// ── 详情（右侧抽屉） ──
+const tag = (t, c) => t ? `<span${c ? ` style="color:${c}"` : ''}>${esc(t)}</span>` : '';
+const goRow = i => `<div class="kit-row" data-kit-go="${ruleKey(i)}"><span class="kit-rt">${esc(nameOf(i))}</span><span class="kit-rm">${md(i.date)} 起 · ${esc(i.region || '全国')}</span></div>`;
+KIT.item('rule', id => {
+  const i = BY_ID.get(id); if (!i) return null;
+  const [cn, ci, cc] = catOf(i), dt = i.detail || {}, left = diffDays(i.date, cstToday());
+  const same = D.items.filter(o => o !== i && i.tags.length && o.tags.includes(i.tags[0]) && shown('')(o) && regionOk(o))
+    .sort((a, b) => Math.abs(diffDays(a.date, i.date)) - Math.abs(diffDays(b.date, i.date)) || heat(b) - heat(a)).slice(0, 6);
+  const docs = (dt.docs || []).filter((d, k, all) => d.title && d.title !== d.type && all.findIndex(x => x.title === d.title) === k);
+  const vers = (dt.versions || []).filter(v => v.pub && v.pub < (i.pub || i.date));
+  return {
+    title: nameOf(i), sub: `${esc(i.kind === 'law' ? i.type : i.kind === 'std' ? '强制性国家标准' : '新闻报道整理')} · ${esc(i.region || '全国')}${i.org ? ' · ' + esc(i.org) : ''}`,
+    cover: i.img || '', thumbIcon: ci, thumbBg: `color-mix(in srgb, ${cc} 22%, transparent)`,
+    tags: [tag(KIND[i.kind][0], KIND[i.kind][1]), ...i.tags.map(t => tag(t)), dt.status ? tag(dt.status) : '', i.articles.length >= 3 ? tag(`🔥 ${i.articles.length} 篇报道`) : ''],
+    big: `<b class="num">${i.date.slice(0, 4)}/${md(i.date)}</b><span class="muted">${left > 0 ? `起施行 · 还有 ${left} 天` : left === 0 ? '今天起施行' : `起施行 · 已施行 ${-left} 天`}</span>`,
+    body: KIT.sec('基本信息', KIT.kv([['类型', i.type], ['施行日期', i.date], ['发布日期', i.pub], ['制定机关', i.org], ['地区', i.region || '全国'], ['标签', i.tags.join('、')],
+        ['标准状态', dt.status || i.status], ['采用国际标准', i.adopt ? '是' : ''], ['中国标准分类号', dt.ccs], ['国际标准分类号', dt.ics], ['主管部门', dt.dept], ['归口部门', dt.tc], ['发布单位', dt.issuer], ['备注', dt.note]]))
+      + (dt.en ? KIT.sec('英文名称', KIT.p(dt.en)) : '')
+      + (i.kind === 'news' && i.name ? KIT.sec('报道标题', KIT.p(i.title)) : '')
+      + (i.summary ? KIT.sec('摘要', KIT.p(i.summary)) : '')
+      + (vers.length ? KIT.sec('历史版本', `<div class="kit-rows">${vers.map(v => `<div class="kit-row"><span class="kit-rt">${esc(v.title)}</span><span class="kit-rm">${esc(v.pub)} 公布</span></div>`).join('')}</div>`, `此前 ${vers.length} 版，这次是修订`) : '')
+      + (docs.length ? KIT.sec('相关资料', `<div class="kit-rows">${docs.map(d => `<div class="kit-row"><span class="kit-rt">${esc(d.title)}</span><span class="kit-rm">${esc(d.type)}</span></div>`).join('')}</div>`, '在原文页查看') : '')
+      + (i.articles.length ? KIT.sec('全部报道', `<div class="kit-rows">${i.articles.slice(0, 6).map(a => `<a class="kit-row" href="${esc(a.url)}" target="_blank" rel="noopener"><span class="kit-rt">${esc(a.title)}</span><span class="kit-rm">${esc(a.source || '来源')} · ${ago(a.published)} ↗</span></a>`).join('')}</div>`, `${i.articles.length} 篇`) : '')
+      + (same.length ? KIT.sec(`同为「${esc(cn)}」的其它新规`, `<div class="kit-rows">${same.map(goRow).join('')}</div>`) : ''),
+    acts: [{ text: i.kind === 'news' ? '阅读报道 ↗' : '查看原文 ↗', href: i.url }, i.img_from && i.img_from !== i.url ? { text: '配图出处 ↗', href: i.img_from } : null],
+  };
+});
+KIT.item('roundup', id => {
+  const r = RU_ID.get(id); if (!r) return null;
+  const m = r.title.match(/(\d{1,2})\s*月/)?.[1];
+  const same = D.roundups.filter(o => o !== r && o.title.match(/(\d{1,2})\s*月/)?.[1] === m).slice(0, 6);
+  const t = cstToday(), month = m ? [monthOf(t, -1), monthOf(t, 0), monthOf(t, 1)].find(x => +x.slice(5) === +m) : '';
+  const rules = month ? D.items.filter(i => ym(i.date) === month && !i.region && i.kind !== 'std').sort((a, b) => heat(b) - heat(a)).slice(0, 6) : [];
+  return { title: r.title, sub: `${esc(r.source)} · ${new Date(r.published).toLocaleString('zh-CN', { hour12: false }).slice(0, -3)}`, thumbIcon: '📰', thumbBg: 'color-mix(in srgb, var(--news) 22%, transparent)',
+    tags: [r.official ? tag('官方媒体', 'var(--accent)') : '', tag('每月盘点'), tag(ago(r.published))],
+    body: KIT.sec('说明', KIT.p('这是媒体每月末发的新规盘点文章，正文在原网站。具体条款、施行日期以官方原文为准。'))
+      + (rules.length ? KIT.sec(`${mName(month)}起施行 · 最受关注`, `<div class="kit-rows">${rules.map(goRow).join('')}</div>`, `<a class="kit-morelink" href="#/list/month/${month}">全部 →</a>`) : '')
+      + (same.length ? KIT.sec('同月的其它盘点', `<div class="kit-rows">${same.map(o => `<div class="kit-row" data-kit-go="roundup/${hid(o.url)}"><span class="kit-rt">${esc(o.title)}</span><span class="kit-rm">${esc(o.source)} · ${ago(o.published)}</span></div>`).join('')}</div>`) : ''),
+    acts: [{ text: '阅读原文 ↗', href: r.url }] };
+});
+
+// ── 列表页 ──
+const LPAGE = 30;
+let listN = LPAGE;
+// 类型 chips（带数量）+ 标签 chips + 排序 + 分页；key 如 month/2026-11、later
+function rulesList(box, key, title, note, pool, q, grouped) {
+  const kind = q.get('kind') || '', tg = q.get('tag') || '', sort = q.get('sort') || 'date';
+  const href = (k, t) => `#/list/${key}${(k || t || sort !== 'date') ? '?' + new URLSearchParams({ ...(k && { kind: k }), ...(t && { tag: t }), ...(sort !== 'date' && { sort }) }) : ''}`;
+  const b = pool.filter(base);
+  const kc = {}; b.forEach(i => kc[i.kind] = (kc[i.kind] || 0) + 1);
+  const tb = b.filter(i => !kind || i.kind === kind), tc = {}; tb.forEach(i => i.tags.forEach(t => tc[t] = (tc[t] || 0) + 1));
+  const list = pool.filter(pick(kind, tg)).filter(shown(kind)).sort(SORTS[sort] || byDate);
+  const page = list.slice(0, listN);
+  box.innerHTML = KIT.shell({ title, note: `${list.length} 条 · ${note}`,
+    chips: [{ text: '全部', href: href('', tg), on: !kind, count: b.length }, ...['law', 'news', 'std'].filter(k => kc[k]).map(k => ({ text: KIND[k][0], href: href(k, tg), on: kind === k, count: kc[k] }))],
+    sort: [['date', '按施行日期'], ['heat', '按关注度'], ['pub', '按发布日期']], sortVal: sort,
+    body: `<div class="filters"><a class="fchip ${!tg ? 'on' : ''}" href="${href(kind, '')}">全部分类</a>${D.tags.filter(t => tc[t]).map(t => `<a class="fchip ${tg === t ? 'on' : ''}" href="${href(kind, t)}">${esc(t)}<i>${tc[t]}</i></a>`).join('')}</div>
+      ${!page.length ? '<div class="card empty">没有符合筛选条件的新规</div>' : grouped && sort === 'date' ? byMonth(page) : `<div class="card list">${page.map(rule).join('')}</div>`}`,
+    more: list.length > listN ? `加载更多（${listN} / ${list.length}）` : '' });
+}
+KIT.list('month', (m, q, box) => {
+  if (!/^\d{4}-\d{2}$/.test(m)) m = monthOf(cstToday(), 1);
+  rulesList(box, 'month/' + m, `${m.slice(0, 4)} 年 ${mName(m)}起施行`, `地区：${state.region === '*' ? '全部地区' : state.region ? '全国 + ' + state.region : '只看全国'}（左侧切换）`, D.items.filter(i => ym(i.date) === m), q, false);
+});
+KIT.list('later', (_, q, box) => {
+  rulesList(box, 'later', '更远的新规', `${mName(monthOf(cstToday(), 2))}及以后施行`, laterPool(), q, true);
+});
+KIT.list('roundup', (_, q, box) => {
+  const off = q.get('official') === '1', all = roundups(), list = all.filter(r => !off || r.official);
+  box.innerHTML = KIT.shell({ title: '每月盘点', note: `${list.length} 篇 · 媒体每月末的新规汇总`,
+    chips: [{ text: '全部', href: '#/list/roundup', on: !off, count: all.length }, { text: '官方媒体', href: '#/list/roundup?official=1', on: off, count: all.filter(r => r.official).length }],
+    body: list.length ? `<div class="card list">${list.slice(0, listN).map(ruRow).join('')}</div>` : '<div class="card empty">还没有盘点文章</div>',
+    more: list.length > listN ? `加载更多（${listN} / ${list.length}）` : '' });
+});
+document.addEventListener('click', e => { if (e.target.closest('[data-kit-more]')) { listN += LPAGE; render(); } });
+document.addEventListener('change', e => {
+  if (!e.target.matches('[data-kit-sort]')) return;
+  const r = KIT.parse(); if (!r) return;
+  r.q.set('sort', e.target.value);
+  if (e.target.value === 'date') r.q.delete('sort');
+  location.hash = `#/list/${r.type}${r.id ? '/' + r.id : ''}${[...r.q].length ? '?' + r.q : ''}`;
+});
+window.addEventListener('hashchange', () => { if (KIT.parse()?.kind !== 'item') listN = LPAGE; }, true);
 
 // ── 导航、右栏 ──
 function views() {
@@ -435,7 +756,7 @@ function renderAside() {
   const t = cstToday(), next = monthOf(t, 1);
   const hot = D.items.filter(i => !i.region && i.date >= t && ym(i.date) <= next).sort((a, b) => heat(b) - heat(a)).slice(0, 6);
   $('#aside').innerHTML = `
-    <div class="card widget"><h3>🔥 近期最受关注</h3>${hot.map(i => `<a class="w-row" href="${esc(i.url)}" target="_blank" rel="noopener"><span class="l">${esc(i.name || i.title)}</span><span class="r">${md(i.date)}</span></a>`).join('') || '<div class="w-note">暂无</div>'}</div>
+    <div class="card widget"><h3>🔥 近期最受关注</h3>${hot.map(i => `<div class="w-row" data-kit-item="${ruleKey(i)}"><span class="l">${esc(i.name || i.title)}</span><span class="r">${md(i.date)}</span></div>`).join('') || '<div class="w-note">暂无</div>'}</div>
     <div class="card widget"><h3>🛰 来源状态</h3>${Object.entries(D.sources).map(([k, s]) => `<div class="w-row"><span class="l"><i class="st-dot ${s.ok ? '' : s.stale ? 'stale' : 'bad'}"></i>${SRC_NAME[k] || k}</span><span class="r">${s.ok ? s.count + ' 条' : s.stale ? '旧数据' : '失败'}</span></div>`).join('')}</div>
     <div class="card widget"><h3>ℹ️ 说明</h3><p class="w-note">「法规」「国标」来自官方数据库，施行日期准确；「新闻」从媒体报道标题提取，同一条新规的多篇报道已合并，具体以官方原文为准。分类标签按关键词自动打，仅供筛选。每天北京时间 07:30 更新。</p></div>`;
 }
@@ -444,14 +765,19 @@ function render() {
   const V = views();
   if (!V[state.view]) state.view = 'next';
   renderNav(V);
-  $('#main').innerHTML = V[state.view].render();
   renderAside();
+  if (KIT.route($('#main'))) return;                     // #/list/… 列表页
+  $('#main').innerHTML = V[state.view].render();
 }
 
 // ── 交互 ──
 document.addEventListener('click', e => {
   const go = e.target.closest('[data-go]');
-  if (go) { state.view = go.dataset.go; state.tag = ''; render(); window.scrollTo({ top: 0 }); return; }
+  if (go) {
+    state.view = go.dataset.go; state.tag = '';
+    if (KIT.parse()) history.pushState(null, '', location.pathname + location.search);   // 从列表页点导航：回到首页视图
+    render(); window.scrollTo({ top: 0 }); return;
+  }
   const tg = e.target.closest('[data-tag]');
   if (tg) { state.tag = state.tag === tg.dataset.tag ? '' : tg.dataset.tag; render(); return; }
   const kd = e.target.closest('[data-kind]');
@@ -474,13 +800,15 @@ async function load() {
   const btn = $('#reload');
   btn.classList.add('spin');
   try {
-    const [r, p] = await Promise.all([fetch('data.json', { cache: 'no-cache' }), fetch('picks.json', { cache: 'no-cache' }).catch(() => null)]);
+    const r = await fetch('data.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error(r.status);
     D = await r.json();
-    PICKS = p && p.ok ? await p.json().catch(() => null) : null;
+    BY_ID = new Map(D.items.map(i => [i.id, i]));
+    RU_ID = new Map(D.roundups.map(x => [hid(x.url), x]));
     $('#updated').textContent = '更新于 ' + ago(D.updated);
     renderRegion();
     render();
+    KIT.boot();
   } catch (err) {
     console.warn('[NewRules]', err);
     if (!D) $('#main').innerHTML = `<div class="card empty">数据读取失败（${esc(err.message)}），稍后点右上角 ↻ 重试</div>`;
@@ -489,8 +817,9 @@ async function load() {
   }
 }
 $('#reload').onclick = load;
+KIT.init(render);
 load();
-setInterval(() => { if (D) $('#updated').textContent = '更新于 ' + ago(D.updated); }, 60 * 1000);   // 只刷新时间，不重绘（避免收起已展开的折叠）
+setInterval(() => { if (D) $('#updated').textContent = '更新于 ' + ago(D.updated); }, 60 * 1000);   // 只刷新时间，不重绘
 </script>
 </body>
 </html>
